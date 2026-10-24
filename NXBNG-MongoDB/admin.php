@@ -105,18 +105,17 @@ $chart_values = array_values($chart_counts);
     <style>
         body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         .sidebar { background: #1b3527; min-height: 100vh; color: #fff; padding-top: 20px; }
-        .sidebar a { color: #cfd8dc; text-decoration: none; padding: 12px 20px; display: block; border-radius: 8px; margin: 4px 12px; }
-        .sidebar a:hover, .sidebar a.active { background: #2e7d32; color: #fff; font-weight: 600; }
+        .sidebar a.nav-item { color: #cfd8dc; text-decoration: none; padding: 12px 20px; display: block; border-radius: 8px; margin: 4px 12px; }
+        .sidebar a.nav-item:hover, .sidebar a.nav-item.active { background: #2e7d32; color: #fff; font-weight: 600; }
         .main-card { background: #fff; border-radius: 12px; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
         .kpi-card { border-radius: 12px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .table-responsive { max-height: 520px; position: relative; }
         thead th { position: sticky; top: 0; background: #2e7d32 !important; color: white !important; z-index: 10; font-weight: 600; }
         
-        /* HIỆU ỨNG HÀNG & CON TRỎ CHUỘT */
         .data-row { cursor: pointer; transition: background-color 0.15s ease; }
         .table-hover tbody tr:hover td { background-color: #e8f5e9 !important; }
 
-        /* GHIM CỐ ĐỊNH CỘT THAO TÁC Ở MÉP PHẢI (STICKY RIGHT COLUMN) */
+        /* GHIM CỐ ĐỊNH CỘT THAO TÁC Ở MÉP PHẢI */
         th.sticky-col-right, td.sticky-col-right {
             position: sticky;
             right: 0;
@@ -154,12 +153,19 @@ $chart_values = array_values($chart_counts);
             <div class="text-center pb-3 border-bottom border-secondary mb-3">
                 <i class="bi bi-file-earmark-spreadsheet-fill fs-2 text-warning"></i>
                 <h6 class="mt-2 text-uppercase fw-bold text-light">NXB NÔNG NGHIỆP</h6>
-                <small class="text-success-emphasis">Quản Trị Biểu Mẫu (Đề tài 11)</small>
+                <small class="text-success-emphasis">Quản Trị Biểu Mẫu</small>
+            </div>
+
+            <!-- NÚT TẠO BIỂU MẪU MỚI (CÔNG CỤ BUILDER) -->
+            <div class="px-3 mb-3">
+                <a href="builder.php" class="btn btn-warning text-dark fw-bold w-100 py-2 shadow-sm d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-plus-circle-fill fs-5"></i> Tạo biểu mẫu mới
+                </a>
             </div>
             
             <div class="px-3 mb-2 text-uppercase text-secondary" style="font-size: 11px;">Danh mục Biểu mẫu</div>
             <?php foreach ($forms as $f): ?>
-                <a href="admin.php?form_id=<?= $f['id'] ?>" class="<?= $selected_form_id == $f['id'] ? 'active' : '' ?>">
+                <a href="admin.php?form_id=<?= $f['id'] ?>" class="nav-item <?= $selected_form_id == $f['id'] ? 'active' : '' ?>">
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="text-truncate" style="max-width: 135px;" title="<?= htmlspecialchars($f['title']) ?>">
                             <?= htmlspecialchars($f['title']) ?>
@@ -179,7 +185,18 @@ $chart_values = array_values($chart_counts);
 
         <!-- Vùng hiển thị Dashboard chính -->
         <div class="col-md-9 col-lg-10 p-4">
-            <!-- Thông báo xóa thành công nếu có -->
+            <!-- Thông báo tạo form thành công -->
+            <?php if (isset($_GET['created'])): ?>
+                <div class="alert alert-success alert-dismissible fade show shadow-sm d-flex align-items-center" role="alert">
+                    <i class="bi bi-check-circle-fill fs-4 me-2"></i>
+                    <div>
+                        <strong>Thành công!</strong> Đã khởi tạo biểu mẫu mới vào hệ thống MySQL. Bạn có thể mở link biểu mẫu để thử nghiệm ngay.
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+
+            <!-- Thông báo xóa thành công -->
             <?php if (isset($_GET['deleted'])): ?>
                 <div class="alert alert-success alert-dismissible fade show shadow-sm d-flex align-items-center" role="alert">
                     <i class="bi bi-check-circle-fill fs-5 me-2"></i>
@@ -192,7 +209,7 @@ $chart_values = array_values($chart_counts);
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <div>
                     <h4 class="fw-bold text-success mb-1">Dữ Liệu Phản Hồi Đã Thu Thập</h4>
-                    <p class="text-muted mb-0">Theo dõi thông tin khách hàng điền trực tiếp từ hệ thống biểu mẫu có điều kiện</p>
+                    <p class="text-muted mb-0">Biểu mẫu đang xem: <strong class="text-dark"><?= htmlspecialchars($current_form_title) ?></strong></p>
                 </div>
                 <div class="d-flex gap-2">
                     <a href="export.php?form_id=<?= $selected_form_id ?>" class="btn btn-success fw-semibold shadow-sm">
@@ -271,7 +288,7 @@ $chart_values = array_values($chart_counts);
                             <?php if (!empty($chart_values)): ?>
                                 <canvas id="analyticsChart"></canvas>
                             <?php else: ?>
-                                <span class="text-muted fst-italic small">Chưa đủ dữ liệu để tạo biểu đồ phân tích</span>
+                                <span class="text-muted fst-italic small">Chưa có dữ liệu trắc nghiệm để vẽ biểu đồ</span>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -292,7 +309,7 @@ $chart_values = array_values($chart_counts);
                 </div>
             </div>
 
-            <!-- Bảng dữ liệu câu trả lời (Cột Thao tác cố định bên phải) -->
+            <!-- Bảng dữ liệu câu trả lời -->
             <div class="card main-card">
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -344,7 +361,7 @@ $chart_values = array_values($chart_counts);
                                                 </td>
                                             <?php endforeach; ?>
                                             
-                                            <!-- CỘT THAO TÁC CỐ ĐỊNH Ở MÉP PHẢI MÀN HÌNH -->
+                                            <!-- CỘT THAO TÁC CỐ ĐỊNH Ở MÉP PHẢI -->
                                             <td class="text-center sticky-col-right">
                                                 <div class="btn-group btn-group-sm shadow-sm" onclick="event.stopPropagation();">
                                                     <button type="button" class="btn btn-outline-primary btn-view-modal" 
@@ -501,7 +518,7 @@ if (detailModal) {
     });
 }
 
-// 4. Nhấp đúp chuột (Double Click) vào hàng bất kỳ để mở Popup xem chi tiết
+// 4. Nhấp đúp chuột vào hàng để mở Popup xem chi tiết
 document.querySelectorAll('#responsesTable tbody tr.data-row').forEach(row => {
     row.addEventListener('dblclick', function(e) {
         const viewBtn = this.querySelector('.btn-view-modal');

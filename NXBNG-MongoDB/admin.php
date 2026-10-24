@@ -15,6 +15,15 @@ $forms = $stmt->fetchAll();
 // 2. Xác định form đang được chọn xem (mặc định form 1)
 $selected_form_id = isset($_GET['form_id']) ? (int)$_GET['form_id'] : ($forms[0]['id'] ?? 1);
 
+// Lấy thông tin tiêu đề form đang chọn
+$current_form_title = "Biểu mẫu";
+foreach ($forms as $f) {
+    if ($f['id'] == $selected_form_id) {
+        $current_form_title = $f['title'];
+        break;
+    }
+}
+
 // 3. Lấy danh sách các câu hỏi của phiên bản form hiện tại
 $stmt_fields = $pdo->prepare("
     SELECT f.id, f.label, f.field_type 
@@ -59,7 +68,6 @@ $total_count = count($responses);
 $seven_days_ago = date('Y-m-d H:i:s', strtotime('-7 days'));
 $recent_count = 0;
 
-// Tìm câu hỏi trắc nghiệm (radio) đầu tiên của Form để tự động vẽ biểu đồ phân tích cơ cấu
 $chart_field = null;
 foreach ($fields as $f) {
     if ($f['field_type'] === 'radio') {
@@ -70,12 +78,10 @@ foreach ($fields as $f) {
 
 $chart_counts = [];
 foreach ($responses as $resp) {
-    // Đếm số phản hồi trong 7 ngày qua
     if ($resp['submitted_at'] >= $seven_days_ago) {
         $recent_count++;
     }
 
-    // Đếm dữ liệu biểu đồ
     if ($chart_field) {
         $val = $answers_map[$resp['response_id']][$chart_field['id']] ?? '';
         if ($val !== '') {
@@ -95,7 +101,6 @@ $chart_values = array_values($chart_counts);
     <title>Hệ Thống Quản Trị Dữ Liệu Thu Thập - NXB Nông Nghiệp</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <!-- Chart.js Thư viện vẽ biểu đồ -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -104,11 +109,36 @@ $chart_values = array_values($chart_counts);
         .sidebar a:hover, .sidebar a.active { background: #2e7d32; color: #fff; font-weight: 600; }
         .main-card { background: #fff; border-radius: 12px; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
         .kpi-card { border-radius: 12px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .table-responsive { max-height: 520px; }
+        .table-responsive { max-height: 520px; position: relative; }
         thead th { position: sticky; top: 0; background: #2e7d32 !important; color: white !important; z-index: 10; font-weight: 600; }
         
+        /* HIỆU ỨNG HÀNG & CON TRỎ CHUỘT */
+        .data-row { cursor: pointer; transition: background-color 0.15s ease; }
+        .table-hover tbody tr:hover td { background-color: #e8f5e9 !important; }
+
+        /* GHIM CỐ ĐỊNH CỘT THAO TÁC Ở MÉP PHẢI (STICKY RIGHT COLUMN) */
+        th.sticky-col-right, td.sticky-col-right {
+            position: sticky;
+            right: 0;
+            z-index: 5;
+            box-shadow: -4px 0 8px rgba(0,0,0,0.06);
+        }
+        thead th.sticky-col-right {
+            background-color: #2e7d32 !important;
+            z-index: 12;
+        }
+        .table-striped tbody tr:nth-of-type(odd) td.sticky-col-right {
+            background-color: #f9fbf9 !important;
+        }
+        .table-striped tbody tr:nth-of-type(even) td.sticky-col-right {
+            background-color: #ffffff !important;
+        }
+        .table-hover tbody tr:hover td.sticky-col-right {
+            background-color: #e8f5e9 !important;
+        }
+        
         @media print {
-            .sidebar, .btn, .no-print, .input-group, #toolbarArea, .kpi-section { display: none !important; }
+            .sidebar, .btn, .no-print, .input-group, #toolbarArea, .kpi-section, .sticky-col-right { display: none !important; }
             .col-md-9, .col-lg-10 { width: 100% !important; flex: 0 0 100% !important; max-width: 100% !important; padding: 0 !important; }
             .card { box-shadow: none !important; border: 1px solid #ddd !important; }
             .table-responsive { max-height: none !important; overflow: visible !important; }
@@ -149,6 +179,15 @@ $chart_values = array_values($chart_counts);
 
         <!-- Vùng hiển thị Dashboard chính -->
         <div class="col-md-9 col-lg-10 p-4">
+            <!-- Thông báo xóa thành công nếu có -->
+            <?php if (isset($_GET['deleted'])): ?>
+                <div class="alert alert-success alert-dismissible fade show shadow-sm d-flex align-items-center" role="alert">
+                    <i class="bi bi-check-circle-fill fs-5 me-2"></i>
+                    <div>Đã xóa phản hồi khỏi hệ thống thành công! Dữ liệu đã được dọn sạch.</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            <?php endif; ?>
+
             <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <div>
@@ -168,9 +207,8 @@ $chart_values = array_values($chart_counts);
                 </div>
             </div>
 
-            <!-- KHỐI KPI & BIỂU ĐỒ THỐNG KÊ (DASHBOARD ANALYTICS) -->
+            <!-- KHỐI KPI & BIỂU ĐỒ THỐNG KÊ -->
             <div class="row g-3 mb-4 kpi-section">
-                <!-- Cột KPI Cards -->
                 <div class="col-lg-7">
                     <div class="row g-3">
                         <div class="col-sm-6">
@@ -224,7 +262,6 @@ $chart_values = array_values($chart_counts);
                     </div>
                 </div>
 
-                <!-- Cột Biểu đồ Chart.js -->
                 <div class="col-lg-5">
                     <div class="card kpi-card bg-white p-3 h-100">
                         <div class="fw-bold text-success mb-2 small text-uppercase">
@@ -241,7 +278,7 @@ $chart_values = array_values($chart_counts);
                 </div>
             </div>
 
-            <!-- Thanh công cụ tìm kiếm và thông tin số lượng -->
+            <!-- Thanh tìm kiếm & hướng dẫn thao tác nhanh -->
             <div id="toolbarArea" class="row g-2 align-items-center mb-3">
                 <div class="col-md-6 col-lg-5">
                     <div class="input-group shadow-sm">
@@ -250,11 +287,12 @@ $chart_values = array_values($chart_counts);
                     </div>
                 </div>
                 <div class="col-md-6 col-lg-7 text-md-end text-muted small">
+                    <span class="badge bg-light text-secondary border me-2"><i class="bi bi-info-circle me-1"></i>Nhấp đúp chuột vào hàng bất kỳ để xem chi tiết</span>
                     <span>Đang hiển thị: <strong id="visibleCount" class="text-success"><?= count($responses) ?></strong> / <strong><?= count($responses) ?></strong> phản hồi</span>
                 </div>
             </div>
 
-            <!-- Bảng dữ liệu câu trả lời -->
+            <!-- Bảng dữ liệu câu trả lời (Cột Thao tác cố định bên phải) -->
             <div class="card main-card">
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -266,23 +304,33 @@ $chart_values = array_values($chart_counts);
                                     <?php foreach ($fields as $field): ?>
                                         <th style="min-width: 170px;"><?= htmlspecialchars($field['label']) ?></th>
                                     <?php endforeach; ?>
+                                    <th class="text-center sticky-col-right" style="width: 105px;">Thao tác</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php if (empty($responses)): ?>
                                     <tr class="no-data-row">
-                                        <td colspan="<?= count($fields) + 2 ?>" class="text-center py-4 text-muted">
+                                        <td colspan="<?= count($fields) + 3 ?>" class="text-center py-4 text-muted">
                                             Chưa có dữ liệu phản hồi nào cho biểu mẫu này.
                                         </td>
                                     </tr>
                                 <?php else: ?>
                                     <?php foreach ($responses as $resp): 
                                         $rid = $resp['response_id'];
+                                        $formatted_time = date('d/m/Y H:i', strtotime($resp['submitted_at']));
+                                        
+                                        $row_details = [];
+                                        foreach ($fields as $f) {
+                                            $row_details[] = [
+                                                'label' => $f['label'],
+                                                'value' => $answers_map[$rid][$f['id']] ?? ''
+                                            ];
+                                        }
                                     ?>
-                                        <tr class="data-row">
+                                        <tr class="data-row" title="Nhấp đúp chuột để xem chi tiết phiếu">
                                             <td class="text-center fw-bold text-secondary">#<?= $rid ?></td>
                                             <td>
-                                                <small class="text-muted"><i class="bi bi-clock me-1"></i><?= date('d/m/Y H:i', strtotime($resp['submitted_at'])) ?></small>
+                                                <small class="text-muted"><i class="bi bi-clock me-1"></i><?= $formatted_time ?></small>
                                             </td>
                                             <?php foreach ($fields as $field): 
                                                 $val = $answers_map[$rid][$field['id']] ?? null;
@@ -295,6 +343,27 @@ $chart_values = array_values($chart_counts);
                                                     <?php endif; ?>
                                                 </td>
                                             <?php endforeach; ?>
+                                            
+                                            <!-- CỘT THAO TÁC CỐ ĐỊNH Ở MÉP PHẢI MÀN HÌNH -->
+                                            <td class="text-center sticky-col-right">
+                                                <div class="btn-group btn-group-sm shadow-sm" onclick="event.stopPropagation();">
+                                                    <button type="button" class="btn btn-outline-primary btn-view-modal" 
+                                                            data-bs-toggle="modal" 
+                                                            data-bs-target="#detailModal"
+                                                            data-id="<?= $rid ?>"
+                                                            data-time="<?= $formatted_time ?>"
+                                                            data-details='<?= htmlspecialchars(json_encode($row_details, JSON_UNESCAPED_UNICODE), ENT_QUOTES, 'UTF-8') ?>'
+                                                            title="Xem chi tiết phiếu">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                    <a href="delete.php?id=<?= $rid ?>&form_id=<?= $selected_form_id ?>" 
+                                                       class="btn btn-outline-danger" 
+                                                       onclick="return confirm('Bạn có chắc chắn muốn xóa phản hồi #<?= $rid ?> này không?\nThao tác này sẽ dọn sạch toàn bộ câu trả lời liên quan!');"
+                                                       title="Xóa phản hồi">
+                                                        <i class="bi bi-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php endif; ?>
@@ -308,11 +377,46 @@ $chart_values = array_values($chart_counts);
     </div>
 </div>
 
+<!-- MODAL POPUP: XEM CHI TIẾT PHIẾU THU THẬP -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title fw-bold" id="detailModalLabel">
+                    <i class="bi bi-file-earmark-text me-2"></i>Chi Tiết Phiếu Thu Thập <span id="modalResponseId"></span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="alert alert-light border mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div><strong>Biểu mẫu:</strong> <span class="text-success fw-semibold"><?= htmlspecialchars($current_form_title) ?></span></div>
+                    <div class="text-muted small"><i class="bi bi-clock me-1"></i>Thời gian nộp: <strong id="modalSubmitTime" class="text-dark"></strong></div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 38%;">Nội dung trường thông tin</th>
+                                <th style="width: 62%;">Thông tin khách hàng điền</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modalDetailBody">
+                            <!-- Nạp tự động qua JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Kịch bản Chart.js & Tìm kiếm Live Search -->
 <script>
-// 1. Khởi tạo biểu đồ Doughnut
+// 1. Biểu đồ Chart.js
 <?php if (!empty($chart_values)): ?>
 const ctx = document.getElementById('analyticsChart').getContext('2d');
 new Chart(ctx, {
@@ -341,7 +445,7 @@ new Chart(ctx, {
 });
 <?php endif; ?>
 
-// 2. Xử lý bộ lọc tìm kiếm thời gian thực
+// 2. Tìm kiếm tức thì (Live Search)
 document.getElementById('liveSearchInput').addEventListener('input', function() {
     const keyword = this.value.toLowerCase().trim();
     const rows = document.querySelectorAll('#responsesTable tbody tr.data-row');
@@ -358,6 +462,53 @@ document.getElementById('liveSearchInput').addEventListener('input', function() 
     });
 
     document.getElementById('visibleCount').textContent = visibleTotal;
+});
+
+// 3. Xử lý Popup Xem Chi Tiết
+const detailModal = document.getElementById('detailModal');
+if (detailModal) {
+    detailModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const responseId = button.getAttribute('data-id');
+        const submitTime = button.getAttribute('data-time');
+        const details = JSON.parse(button.getAttribute('data-details') || '[]');
+
+        document.getElementById('modalResponseId').textContent = '#' + responseId;
+        document.getElementById('modalSubmitTime').textContent = submitTime;
+
+        const tbody = document.getElementById('modalDetailBody');
+        tbody.innerHTML = '';
+
+        details.forEach(item => {
+            const tr = document.createElement('tr');
+            
+            const tdLabel = document.createElement('td');
+            tdLabel.className = 'fw-semibold text-secondary';
+            tdLabel.textContent = item.label;
+
+            const tdValue = document.createElement('td');
+            if (!item.value || item.value.trim() === '') {
+                tdValue.innerHTML = '<span class="text-muted fst-italic">(Bỏ trống / Ẩn do điều kiện)</span>';
+            } else {
+                tdValue.className = 'fw-medium text-dark';
+                tdValue.textContent = item.value;
+            }
+
+            tr.appendChild(tdLabel);
+            tr.appendChild(tdValue);
+            tbody.appendChild(tr);
+        });
+    });
+}
+
+// 4. Nhấp đúp chuột (Double Click) vào hàng bất kỳ để mở Popup xem chi tiết
+document.querySelectorAll('#responsesTable tbody tr.data-row').forEach(row => {
+    row.addEventListener('dblclick', function(e) {
+        const viewBtn = this.querySelector('.btn-view-modal');
+        if (viewBtn) {
+            viewBtn.click();
+        }
+    });
 });
 </script>
 </body>

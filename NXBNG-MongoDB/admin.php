@@ -1,7 +1,7 @@
 <?php
 require_once 'db.php';
 
-// 1. Lấy danh sách các biểu mẫu để làm bộ lọc
+// 1. Lấy danh sách các biểu mẫu
 $stmt = $pdo->query("
     SELECT f.id, f.title, 
            (SELECT COUNT(*) FROM responses r 
@@ -53,6 +53,39 @@ if (!empty($response_ids)) {
         $answers_map[$row['response_id']][$row['field_id']] = $row['answer_value'];
     }
 }
+
+// 5. TÍNH TOÁN DỮ LIỆU KPI & BIỂU ĐỒ (CHART.JS)
+$total_count = count($responses);
+$seven_days_ago = date('Y-m-d H:i:s', strtotime('-7 days'));
+$recent_count = 0;
+
+// Tìm câu hỏi trắc nghiệm (radio) đầu tiên của Form để tự động vẽ biểu đồ phân tích cơ cấu
+$chart_field = null;
+foreach ($fields as $f) {
+    if ($f['field_type'] === 'radio') {
+        $chart_field = $f;
+        break;
+    }
+}
+
+$chart_counts = [];
+foreach ($responses as $resp) {
+    // Đếm số phản hồi trong 7 ngày qua
+    if ($resp['submitted_at'] >= $seven_days_ago) {
+        $recent_count++;
+    }
+
+    // Đếm dữ liệu biểu đồ
+    if ($chart_field) {
+        $val = $answers_map[$resp['response_id']][$chart_field['id']] ?? '';
+        if ($val !== '') {
+            $chart_counts[$val] = ($chart_counts[$val] ?? 0) + 1;
+        }
+    }
+}
+
+$chart_labels = array_keys($chart_counts);
+$chart_values = array_values($chart_counts);
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -62,18 +95,20 @@ if (!empty($response_ids)) {
     <title>Hệ Thống Quản Trị Dữ Liệu Thu Thập - NXB Nông Nghiệp</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <!-- Chart.js Thư viện vẽ biểu đồ -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .sidebar { background: #1e3a2b; min-height: 100vh; color: #fff; padding-top: 20px; }
+        body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .sidebar { background: #1b3527; min-height: 100vh; color: #fff; padding-top: 20px; }
         .sidebar a { color: #cfd8dc; text-decoration: none; padding: 12px 20px; display: block; border-radius: 8px; margin: 4px 12px; }
         .sidebar a:hover, .sidebar a.active { background: #2e7d32; color: #fff; font-weight: 600; }
-        .main-card { background: #fff; border-radius: 12px; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .table-responsive { max-height: 580px; }
+        .main-card { background: #fff; border-radius: 12px; border: none; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
+        .kpi-card { border-radius: 12px; border: none; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .table-responsive { max-height: 520px; }
         thead th { position: sticky; top: 0; background: #2e7d32 !important; color: white !important; z-index: 10; font-weight: 600; }
         
-        /* Tối ưu định dạng khi in ấn hoặc xuất PDF */
         @media print {
-            .sidebar, .btn, .no-print, .input-group, #toolbarArea { display: none !important; }
+            .sidebar, .btn, .no-print, .input-group, #toolbarArea, .kpi-section { display: none !important; }
             .col-md-9, .col-lg-10 { width: 100% !important; flex: 0 0 100% !important; max-width: 100% !important; padding: 0 !important; }
             .card { box-shadow: none !important; border: 1px solid #ddd !important; }
             .table-responsive { max-height: none !important; overflow: visible !important; }
@@ -112,15 +147,15 @@ if (!empty($response_ids)) {
             </div>
         </div>
 
-        <!-- Vùng hiển thị bảng dữ liệu thu thập -->
+        <!-- Vùng hiển thị Dashboard chính -->
         <div class="col-md-9 col-lg-10 p-4">
+            <!-- Header -->
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <div>
                     <h4 class="fw-bold text-success mb-1">Dữ Liệu Phản Hồi Đã Thu Thập</h4>
                     <p class="text-muted mb-0">Theo dõi thông tin khách hàng điền trực tiếp từ hệ thống biểu mẫu có điều kiện</p>
                 </div>
                 <div class="d-flex gap-2">
-                    <!-- Nút xuất Excel (CSV UTF-8) -->
                     <a href="export.php?form_id=<?= $selected_form_id ?>" class="btn btn-success fw-semibold shadow-sm">
                         <i class="bi bi-file-earmark-excel me-1"></i> Xuất Excel (CSV)
                     </a>
@@ -130,6 +165,79 @@ if (!empty($response_ids)) {
                     <a href="form.php?id=<?= $selected_form_id ?>" target="_blank" class="btn btn-outline-success">
                         <i class="bi bi-plus-circle me-1"></i> Gửi thử phản hồi
                     </a>
+                </div>
+            </div>
+
+            <!-- KHỐI KPI & BIỂU ĐỒ THỐNG KÊ (DASHBOARD ANALYTICS) -->
+            <div class="row g-3 mb-4 kpi-section">
+                <!-- Cột KPI Cards -->
+                <div class="col-lg-7">
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="card kpi-card bg-white p-3 h-100 border-start border-4 border-success">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="text-muted small fw-semibold">TỔNG LƯỢT TIẾP NHẬN</div>
+                                        <h2 class="fw-bold text-success my-1"><?= $total_count ?></h2>
+                                        <small class="text-muted">Toàn bộ lịch sử biểu mẫu</small>
+                                    </div>
+                                    <div class="bg-success-subtle p-3 rounded-circle text-success fs-3">
+                                        <i class="bi bi-inbox-fill"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="card kpi-card bg-white p-3 h-100 border-start border-4 border-primary">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="text-muted small fw-semibold">PHẢN HỒI GẦN ĐÂY</div>
+                                        <h2 class="fw-bold text-primary my-1"><?= $recent_count ?></h2>
+                                        <small class="text-muted">Phát sinh trong 7 ngày qua</small>
+                                    </div>
+                                    <div class="bg-primary-subtle p-3 rounded-circle text-primary fs-3">
+                                        <i class="bi bi-graph-up-arrow"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card kpi-card bg-white p-3 border-start border-4 border-warning">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="bg-warning-subtle p-3 rounded-circle text-warning-emphasis fs-3">
+                                        <i class="bi bi-pie-chart-fill"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-muted small fw-semibold">CHỈ SỐ TRỌNG YẾU</div>
+                                        <div class="fw-bold text-dark mt-1">
+                                            <?= $chart_field ? htmlspecialchars($chart_field['label']) : 'Phân tích số liệu' ?>
+                                        </div>
+                                        <small class="text-muted">
+                                            <?= count($chart_counts) > 0 ? 'Đã phân loại thành ' . count($chart_counts) . ' nhóm dữ liệu' : 'Chưa có phân loại trắc nghiệm' ?>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cột Biểu đồ Chart.js -->
+                <div class="col-lg-5">
+                    <div class="card kpi-card bg-white p-3 h-100">
+                        <div class="fw-bold text-success mb-2 small text-uppercase">
+                            <i class="bi bi-bar-chart-steps me-1"></i> Phân Bố Theo: <?= $chart_field ? htmlspecialchars($chart_field['label']) : 'Cơ cấu' ?>
+                        </div>
+                        <div style="position: relative; height: 180px; display: flex; justify-content: center; align-items: center;">
+                            <?php if (!empty($chart_values)): ?>
+                                <canvas id="analyticsChart"></canvas>
+                            <?php else: ?>
+                                <span class="text-muted fst-italic small">Chưa đủ dữ liệu để tạo biểu đồ phân tích</span>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -201,8 +309,39 @@ if (!empty($response_ids)) {
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Kịch bản Chart.js & Tìm kiếm Live Search -->
 <script>
-// Xử lý bộ lọc tìm kiếm thời gian thực (Live Search)
+// 1. Khởi tạo biểu đồ Doughnut
+<?php if (!empty($chart_values)): ?>
+const ctx = document.getElementById('analyticsChart').getContext('2d');
+new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: <?= json_encode($chart_labels) ?>,
+        datasets: [{
+            data: <?= json_encode($chart_values) ?>,
+            backgroundColor: [
+                '#10b981', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6', '#64748b'
+            ],
+            borderWidth: 2,
+            hoverOffset: 4
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { boxWidth: 12, font: { size: 11 } }
+            }
+        }
+    }
+});
+<?php endif; ?>
+
+// 2. Xử lý bộ lọc tìm kiếm thời gian thực
 document.getElementById('liveSearchInput').addEventListener('input', function() {
     const keyword = this.value.toLowerCase().trim();
     const rows = document.querySelectorAll('#responsesTable tbody tr.data-row');
@@ -218,7 +357,6 @@ document.getElementById('liveSearchInput').addEventListener('input', function() 
         }
     });
 
-    // Cập nhật bộ đếm hiển thị
     document.getElementById('visibleCount').textContent = visibleTotal;
 });
 </script>

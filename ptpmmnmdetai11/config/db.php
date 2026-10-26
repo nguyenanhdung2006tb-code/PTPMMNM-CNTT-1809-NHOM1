@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
 $dbname = 'form_system';
-$username = 'form_user';
-$password = '123456';
+$username = 'root';
+$password = ''; // Để trống 2 dấu nháy đơn, không cách
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password, [

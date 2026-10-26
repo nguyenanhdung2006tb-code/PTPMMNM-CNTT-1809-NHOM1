@@ -34,7 +34,7 @@
             <a href="dich-vu.php" class="hover:text-green-600 transition-all">Dịch vụ</a>
             <a href="san-pham.php" class="hover:text-green-600 transition-all">Sản phẩm</a>
             <a href="forms.php" class="hover:text-green-600 transition-all">Đặt in & Khảo sát</a>
-            <a href="admin.php" class="hover:text-green-600 transition-all">Quản trị biểu mẫu</a>
+            <a href="admin/" class="hover:text-green-600 transition-all">Quản trị biểu mẫu</a>
             <a href="in-lich-tet.php" class="hover:text-green-600 transition-all">In lịch Tết</a>
             <a href="blog.php" class="hover:text-green-600 transition-all">Blog</a>
             <a href="About.php" class="hover:text-green-600 transition-all">Về chúng tôi</a>
@@ -65,7 +65,7 @@
         <nav class="flex flex-col gap-1">
             <a href="index.php" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Trang chủ</a>
             <a href="forms.php" class="block px-4 py-3 rounded-xl bg-emerald-100/60 text-emerald-800 font-bold">📋 Đặt in & Khảo sát (Form Đề tài 11)</a>
-            <a href="admin.php" class="block px-4 py-3 rounded-xl bg-amber-100/60 text-amber-800 font-bold">⚙️ Quản trị Biểu mẫu</a>
+            <a href="admin/" class="block px-4 py-3 rounded-xl bg-amber-100/60 text-amber-800 font-bold">⚙️ Quản trị Biểu mẫu</a>
             <a href="catalogue.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Catalogue lịch</a>
             <a href="dich-vu.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Dịch vụ</a>
             <a href="san-pham.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
@@ -274,7 +274,7 @@
                 <ul class="space-y-4 text-gray-500 text-sm">
                     <li><a href="index.php" class="hover:text-green-600">Trang chủ</a></li>
                     <li><a href="forms.php" class="text-emerald-700 font-semibold hover:text-green-600">📋 Đăng ký & Khảo sát (Form)</a></li>
-                    <li><a href="admin.php" class="text-amber-700 font-semibold hover:text-amber-800">⚙️ Quản trị Biểu mẫu</a></li>
+                    <li><a href="admin/" class="text-amber-700 font-semibold hover:text-amber-800">⚙️ Quản trị Biểu mẫu</a></li>
                     <li><a href="catalogue.php" class="hover:text-green-600">Catalogue lịch</a></li>
                     <li><a href="dich-vu.php" class="hover:text-green-600">Dịch vụ</a></li>
                     <li><a href="san-pham.php" class="hover:text-green-600">Sản phẩm</a></li>

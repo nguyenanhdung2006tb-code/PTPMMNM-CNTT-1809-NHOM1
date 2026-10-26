@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalog Trực Tuyến 2025 - Lịch Nông Nghiệp</title>
+    <title>In Túi Giấy - Lịch Nông Nghiệp</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -13,33 +13,24 @@
         .text-brand-green { color: #34a853; }
         .bg-brand-green { background-color: #34a853; }
         .bg-brand-orange { background-color: #f9a825; }
-        .bg-light-green { background-color: #e8f5e9; }
+        .border-brand-green { border-color: #34a853; }
         
-        /* Container cho Iframe mượt mà hơn */
-        .iframe-container {
-            position: relative;
-            width: 100%;
-            padding-top: 56.25%; /* Tỷ lệ 16:9 */
-            height: 0;
-            overflow: hidden;
-            border-radius: 40px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        /* Tinh chỉnh khoảng cách icon check */
+        .spec-list li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
         }
-        .iframe-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
+        .check-icon {
+            background-color: #e8f5e9;
+            color: #34a853;
+            border-radius: 50%;
+            padding: 4px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            margin-top: 2px;
         }
 
-        /* Trang trí nền */
-        .bg-pattern {
-            background-image: radial-gradient(#34a853 0.5px, transparent 0.5px);
-            background-size: 20px 20px;
-            opacity: 0.1;
-        }
     /* Làm cho toàn bộ nội dung văn bản nhỏ lại */
     p {
         font-size: 14px !important; /* Cỡ chữ nhỏ hơn */
@@ -60,7 +51,7 @@
 </head>
 <body class="bg-white">
 
-    <header class="bg-white sticky top-0 z-50 shadow-sm px-4 md:px-16 py-4 flex items-center justify-between">
+  <header class="bg-white sticky top-0 z-50 shadow-sm px-4 md:px-16 py-4 flex items-center justify-between">
         <button id="menuBtn" type="button" class="lg:hidden w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition order-last" aria-label="Mở menu" aria-expanded="false">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
@@ -71,12 +62,12 @@
     </a>
 </div>
         <nav class="hidden lg:flex space-x-8 font-medium text-gray-600">
-            <a href="index.php" class="hover:text-green-600 transition-all0">Trang chủ</a>
-            <a href="catalogue.php" class="text-green-600 border-b-2 border-green-600">catalogue lịch </a>
-            <a href="dich-vu.php" class="hover:text-green-600 transition-all">Dịch vụ</a>
+            <a href="index.php" class="hover:text-green-600 transition-all">Trang chủ</a>
+            <a href="catalogue.php" class="hover:text-green-600 transition-all">catalogue lịch </a>
+            <a href="dich-vu.php" class="text-green-600 border-b-2 border-green-600">Dịch vụ</a>
             <a href="san-pham.php" class="hover:text-green-600 transition-all">Sản phẩm</a>
                         <a href="forms.php" class="hover:text-green-600 transition-all">Đặt in & Khảo sát</a>
-            <a href="admin.php" class="hover:text-green-600 transition-all">Quản trị biểu mẫu</a>
+            <a href="admin/" class="hover:text-green-600 transition-all">Quản trị biểu mẫu</a>
             <a href="in-lich-tet.php" class="hover:text-green-600 transition-all">In lịch Tết</a>
             <a href="blog.php" class="hover:text-green-600 transition-all">Blog</a>
             <a href="About.php" class="hover:text-green-600 transition-all">Về chúng tôi</a>
@@ -103,11 +94,11 @@
     <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4">
         <nav class="flex flex-col gap-1">
                 <a href="index.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Trang chủ</a>
-                <a href="catalogue.php" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">catalogue lịch</a>
-                <a href="dich-vu.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Dịch vụ</a>
+                <a href="catalogue.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">catalogue lịch</a>
+                <a href="dich-vu.php" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Dịch vụ</a>
                 <a href="san-pham.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
                             <a href="forms.php" class="block px-4 py-3 rounded-xl bg-emerald-100/60 text-emerald-800 font-bold">📋 Đặt in & Khảo sát (Form Đề tài 11)</a>
-            <a href="admin.php" class="block px-4 py-3 rounded-xl bg-amber-100/60 text-amber-800 font-bold">⚙️ Quản trị Biểu mẫu</a>
+            <a href="admin/" class="block px-4 py-3 rounded-xl bg-amber-100/60 text-amber-800 font-bold">⚙️ Quản trị Biểu mẫu</a>
             <a href="in-lich-tet.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">In lịch Tết</a>
                 <a href="blog.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Blog</a>
                 <a href="About.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
@@ -116,44 +107,84 @@
     </div>
 
 
-    <main>
-        <section class="relative py-16 bg-light-green overflow-hidden">
-            <div class="absolute inset-0 bg-pattern"></div>
-            <div class="container mx-auto px-6 lg:px-20 relative z-10 text-center">
-                <h1 class="text-4xl lg:text-6xl font-extrabold text-gray-900 mb-6" data-aos="zoom-in">
-                    Khám Phá <span class="text-brand-green">Bộ Sưu Tập 2027</span>
-                </h1>
-                <p class="text-gray-600 max-w-2xl mx-auto text-lg mb-10" data-aos="fade-up" data-aos-delay="100">
-                    Lật trang trực tuyến để trải nghiệm trọn vẹn các mẫu thiết kế Lịch Tết, Túi Giấy và Hộp Quà tặng cao cấp mới nhất từ Lịch Nông Nghiệp.
-                </p>
+    <div class="container mx-auto px-6 lg:px-20 py-6" data-aos="fade-down">
+        <div class="flex items-center justify-between text-sm text-gray-500">
+            <div class="flex items-center space-x-2">
+                <span>Trang chủ</span> <span>&rsaquo;</span>
+                <span>Dịch vụ</span> <span>&rsaquo;</span>
+                <span>Danh mục</span> <span>&rsaquo;</span>
+                <span class="text-brand-green font-medium">In Túi Giấy</span>
             </div>
-        </section>
+        </div>
+        <a href="dich-vu.php" class="inline-flex items-center text-gray-600 mt-6 hover:text-brand-green transition">
+            <span class="mr-2">←</span> Quay lại Danh mục
+        </a>
+    </div>
 
-        <section class="container mx-auto px-6 lg:px-20 -mt-12 mb-24">
-            <div class="iframe-container" data-aos="fade-up" data-aos-delay="200">
-                <iframe 
-                    src="https://online.fliphtml5.com/nongnghiep2979/hbyy/" 
-                    seamless="seamless" 
-                    scrolling="no" 
-                    frameborder="0" 
-                    allowtransparency="true" 
-                    allowfullscreen="true">
-                </iframe>
-            </div>
+    <main class="container mx-auto px-6 lg:px-20 py-4 pb-24">
+        <div class="flex flex-col lg:flex-row gap-12">
             
-            <div class="flex flex-col md:flex-row justify-center gap-6 mt-12" data-aos="fade-up">
-                <a href="https://online.fliphtml5.com/nongnghiep2979/hbyy/" target="_blank" class="flex items-center justify-center bg-white border-2 border-brand-green text-brand-green px-8 py-4 rounded-2xl font-bold hover:bg-green-50 transition-all">
-                    <span class="mr-2"></span> Xem toàn màn hình
-                </a>
-                <button class="flex items-center justify-center bg-brand-green text-white px-8 py-4 rounded-2xl font-bold shadow-lg hover:bg-green-700 transition-all">
-                    <span class="mr-2"></span> Nhận báo giá các mẫu trong Catalog
-                </button>
+            <div class="lg:w-1/2" data-aos="fade-right">
+                <div class="rounded-[40px] overflow-hidden shadow-2xl bg-gray-100 border border-gray-100">
+                    <img src="image/anhsanpham1.jpg" alt="In Túi Giấy" class="w-full h-full object-cover" data-page-image-slot="0">
+                </div>
             </div>
-        </section>
 
+            <div class="lg:w-1/2" data-aos="fade-left">
+                <h1 class="text-[56px] font-extrabold text-black leading-tight mb-2">In Hộp sản phẩm</h1>
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Liên hệ nhận báo giá</h2>
+                
+                <div class="space-y-4 text-gray-600 text-[17px] leading-relaxed mb-10">
+                    <p>Sản phẩm được sản xuất với quy trình kiểm soát chất lượng nghiêm ngặt, sử dụng nguyên vật liệu cao cấp và công nghệ in ấn tiên tiến nhất hiện nay.</p>
+                    <p>Chúng tôi cam kết mang đến cho khách hàng những sản phẩm hoàn hảo, đáp ứng yêu cầu kỹ thuật và thẩm mỹ, góp phần nâng cao giá trị thương hiệu của doanh nghiệp.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-6 flex items-center">
+                        <span class="w-8 h-1 bg-brand-orange mr-3"></span>
+                        Thông số kỹ thuật
+                    </h3>
+                    <ul class="spec-list">
+                        <li>
+                            <div class="check-icon">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <span><strong>Chất lượng:</strong> Đạt tiêu chuẩn ISO 9001:2015</span>
+                        </li>
+                        <li>
+                            <div class="check-icon">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <span><strong>Tùy chỉnh:</strong> Thiết kế và kích thước theo yêu cầu</span>
+                        </li>
+                        <li>
+                            <div class="check-icon">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <span><strong>Bảo hành:</strong> Đổi trả 100% nếu lỗi do sản xuất</span>
+                        </li>
+                        <li>
+                            <div class="check-icon">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <span><strong>Hỗ trợ:</strong> Tư vấn thiết kế miễn phí</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-wrap gap-4 mt-10">
+                    <button class="bg-brand-green text-white px-8 py-4 rounded-2xl font-bold text-lg flex items-center shadow-lg hover:bg-green-700 transition">
+                        <span class="mr-2"></span> <a href="lien-he.php" class="text-white hover:text-green-200">Liên hệ đặt hàng ngay</a>
+                    </button>
+                    <button class="border-2 border-brand-green text-brand-green px-8 py-4 rounded-2xl font-bold text-lg hover:bg-green-50 transition">
+                        Nhận tư vấn miễn phí
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
 
-   <footer class="bg-white border-t border-gray-100 pt-16 pb-8 px-4 md:px-16">
+      <footer class="bg-white border-t border-gray-100 pt-16 pb-8 px-4 md:px-16">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div class="col-span-1 md:col-span-1">
               <div class="flex items-center">
@@ -179,8 +210,8 @@
                 <h5 class="font-bold mb-6">Thông tin liên hệ</h5>
                 <ul class="space-y-4 text-gray-500 text-sm">
                     <li> Xưởng: Số 54, Ngõ 459 phố Bạch Mai, TP.Hà Nội </li>
-                     <li>0972 666 111 - 0396 294 628 - 0976 585 945</li>             
-                      <li>Ketoan.inbaobinn2022@gmail.com</li>
+                    <li>0972 666 111 - 0396 294 628 - 0976 585 945</li>
+                    <li>Ketoan.inbaobinn2022@gmail.com</li>
                 </ul>
             </div>
             <div>
@@ -211,12 +242,14 @@
         </div>
     </footer>
 
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // Khởi tạo hiệu ứng AOS áp dụng cho toàn trang
         AOS.init({
-            duration: 1000,
-            once: true,
-            offset: 100
+            duration: 800, // Tốc độ hiện lên (0.8 giây)
+            once: true,    // Chỉ chạy hiệu ứng 1 lần
+            offset: 50     // Khoảng cách bắt đầu kích hoạt
         });
     </script>
     <script src="config.js"></script>

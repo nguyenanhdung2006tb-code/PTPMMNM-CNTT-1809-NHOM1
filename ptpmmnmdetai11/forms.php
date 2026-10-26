@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once 'config/db.php';
 
 // Lấy toàn bộ các biểu mẫu đang hoạt động
 $stmt = $pdo->query("

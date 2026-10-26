@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once '../config/db.php';
 
 // 1. Lấy danh sách các biểu mẫu
 $stmt = $pdo->query("
@@ -166,7 +166,7 @@ $chart_values = array_values($chart_counts);
 
             <!-- NÚT ĐIỀU HƯỚNG VỀ TRANG CHỦ & TẠO FORM MỚI -->
             <div class="px-3 mb-3 d-flex flex-column gap-2">
-                <a href="index.php" class="btn btn-outline-light w-100 py-2 d-flex align-items-center justify-content-center gap-2">
+                <a href="../index.php" class="btn btn-outline-light w-100 py-2 d-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-house-door"></i> Về Trang Chủ Cổng Tin
                 </a>
                 <a href="builder.php" class="btn btn-warning text-dark fw-bold w-100 py-2 shadow-sm d-flex align-items-center justify-content-center gap-2">
@@ -176,7 +176,7 @@ $chart_values = array_values($chart_counts);
             
             <div class="px-3 mb-2 text-uppercase text-secondary" style="font-size: 11px;">Danh mục Biểu mẫu</div>
             <?php foreach ($forms as $f): ?>
-                <a href="admin.php?form_id=<?= $f['id'] ?>" class="nav-item <?= $selected_form_id == $f['id'] ? 'active' : '' ?>">
+                <a href="index.php?form_id=<?= $f['id'] ?>" class="nav-item <?= $selected_form_id == $f['id'] ? 'active' : '' ?>">
                     <div class="d-flex justify-content-between align-items-center">
                         <span class="text-truncate" style="max-width: 135px;" title="<?= htmlspecialchars($f['title']) ?>">
                             <?= htmlspecialchars($f['title']) ?>
@@ -188,7 +188,7 @@ $chart_values = array_values($chart_counts);
 
             <div class="mt-4 px-3">
                 <hr class="border-secondary">
-                <a href="form.php?id=<?= $selected_form_id ?>" target="_blank" class="btn btn-outline-success text-light text-center w-100 py-2">
+                <a href="../form.php?id=<?= $selected_form_id ?>" target="_blank" class="btn btn-outline-success text-light text-center w-100 py-2">
                     <i class="bi bi-box-arrow-up-right me-1"></i> Mở trang điền form
                 </a>
             </div>
@@ -223,7 +223,7 @@ $chart_values = array_values($chart_counts);
                     <p class="text-muted mb-0">Biểu mẫu đang xem: <strong class="text-dark"><?= htmlspecialchars($current_form_title) ?></strong></p>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="index.php" class="btn btn-outline-secondary">
+                    <a href="../index.php" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left me-1"></i> Trang chủ
                     </a>
                     <a href="export.php?form_id=<?= $selected_form_id ?>" class="btn btn-success fw-semibold shadow-sm">
@@ -232,7 +232,7 @@ $chart_values = array_values($chart_counts);
                     <button onclick="window.print()" class="btn btn-outline-secondary">
                         <i class="bi bi-printer me-1"></i> In danh sách
                     </button>
-                    <a href="form.php?id=<?= $selected_form_id ?>" target="_blank" class="btn btn-outline-success">
+                    <a href="../form.php?id=<?= $selected_form_id ?>" target="_blank" class="btn btn-outline-success">
                         <i class="bi bi-plus-circle me-1"></i> Gửi thử phản hồi
                     </a>
                 </div>

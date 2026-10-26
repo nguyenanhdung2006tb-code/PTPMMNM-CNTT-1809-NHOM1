@@ -103,7 +103,15 @@ $chart_values = array_values($chart_counts);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { 
+            background-color: #f4f6f9; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            animation: smoothFadeIn 0.35s ease-out;
+        }
+        @keyframes smoothFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
         .sidebar { background: #1b3527; min-height: 100vh; color: #fff; padding-top: 20px; }
         .sidebar a.nav-item { color: #cfd8dc; text-decoration: none; padding: 12px 20px; display: block; border-radius: 8px; margin: 4px 12px; }
         .sidebar a.nav-item:hover, .sidebar a.nav-item.active { background: #2e7d32; color: #fff; font-weight: 600; }
@@ -153,11 +161,14 @@ $chart_values = array_values($chart_counts);
             <div class="text-center pb-3 border-bottom border-secondary mb-3">
                 <i class="bi bi-file-earmark-spreadsheet-fill fs-2 text-warning"></i>
                 <h6 class="mt-2 text-uppercase fw-bold text-light">NXB NÔNG NGHIỆP</h6>
-                <small class="text-success-emphasis">Quản Trị Biểu Mẫu</small>
+                <small class="text-success-emphasis">Hệ Thống Quản Trị Biểu Mẫu</small>
             </div>
 
-            <!-- NÚT TẠO BIỂU MẪU MỚI (CÔNG CỤ BUILDER) -->
-            <div class="px-3 mb-3">
+            <!-- NÚT ĐIỀU HƯỚNG VỀ TRANG CHỦ & TẠO FORM MỚI -->
+            <div class="px-3 mb-3 d-flex flex-column gap-2">
+                <a href="index.html" class="btn btn-outline-light w-100 py-2 d-flex align-items-center justify-content-center gap-2">
+                    <i class="bi bi-house-door"></i> Về Trang Chủ Cổng Tin
+                </a>
                 <a href="builder.php" class="btn btn-warning text-dark fw-bold w-100 py-2 shadow-sm d-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-plus-circle-fill fs-5"></i> Tạo biểu mẫu mới
                 </a>
@@ -212,6 +223,9 @@ $chart_values = array_values($chart_counts);
                     <p class="text-muted mb-0">Biểu mẫu đang xem: <strong class="text-dark"><?= htmlspecialchars($current_form_title) ?></strong></p>
                 </div>
                 <div class="d-flex gap-2">
+                    <a href="index.html" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i> Trang chủ
+                    </a>
                     <a href="export.php?form_id=<?= $selected_form_id ?>" class="btn btn-success fw-semibold shadow-sm">
                         <i class="bi bi-file-earmark-excel me-1"></i> Xuất Excel (CSV)
                     </a>
@@ -530,3 +544,4 @@ document.querySelectorAll('#responsesTable tbody tr.data-row').forEach(row => {
 </script>
 </body>
 </html>
+

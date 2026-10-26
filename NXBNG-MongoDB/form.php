@@ -87,9 +87,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($form['title']) ?> - NXB Nông Nghiệp</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .form-container { max-width: 760px; margin: 40px auto; background: #fff; padding: 35px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        body { 
+            background-color: #f4f6f9; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            animation: smoothFadeIn 0.35s ease-out;
+        }
+        @keyframes smoothFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .form-wrapper { max-width: 760px; margin: 30px auto; }
+        .form-container { background: #fff; padding: 35px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
         .header-box { border-bottom: 2px solid #28a745; padding-bottom: 15px; margin-bottom: 25px; }
         .form-label { font-weight: 600; color: #333; }
         .text-required { color: #dc3545; }
@@ -99,68 +109,80 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 <div class="container">
-    <div class="form-container">
-        <!-- Tiêu đề biểu mẫu -->
-        <div class="header-box text-center">
-            <span class="badge bg-success mb-2">HỆ THỐNG BIỂU MẪU THU THẬP DỮ LIỆU</span>
-            <h3 class="fw-bold text-success"><?= htmlspecialchars($form['title']) ?></h3>
-            <p class="text-muted mb-1"><?= htmlspecialchars($form['description']) ?></p>
-            <small class="text-secondary">(Phiên bản áp dụng: v<?= $form['version_number'] ?>)</small>
+    <div class="form-wrapper">
+        <!-- THANH ĐIỀU HƯỚNG QUAY LẠI TRANG CHỦ & QUẢN TRỊ -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="index.html" class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-house-door me-1"></i> Về Trang Chủ Cổng Tin
+            </a>
+            <a href="admin.php?form_id=<?= $form_id ?>" class="btn btn-outline-success btn-sm">
+                <i class="bi bi-speedometer2 me-1"></i> Đến Trang Quản Trị
+            </a>
         </div>
 
-        <!-- Thông báo kết quả -->
-        <?php if (!empty($message)): ?>
-            <div class="alert alert-<?= $message_type ?> alert-dismissible fade show" role="alert">
-                <?= $message ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <div class="form-container">
+            <!-- Tiêu đề biểu mẫu -->
+            <div class="header-box text-center">
+                <span class="badge bg-success mb-2">HỆ THỐNG BIỂU MẪU THU THẬP DỮ LIỆU</span>
+                <h3 class="fw-bold text-success"><?= htmlspecialchars($form['title']) ?></h3>
+                <p class="text-muted mb-1"><?= htmlspecialchars($form['description']) ?></p>
+                <small class="text-secondary">(Phiên bản áp dụng: v<?= $form['version_number'] ?>)</small>
             </div>
-        <?php endif; ?>
 
-        <!-- Form nhập liệu -->
-        <form method="POST" id="dynamicForm">
-            <?php foreach ($fields as $field): 
-                $options = !empty($field['options_json']) ? json_decode($field['options_json'], true) : [];
-            ?>
-                <div class="mb-3 field-group" id="field-wrap-<?= $field['id'] ?>" data-field-id="<?= $field['id'] ?>">
-                    <label class="form-label">
-                        <?= htmlspecialchars($field['label']) ?>
-                        <?php if ($field['is_required']): ?>
-                            <span class="text-required">*</span>
-                        <?php endif; ?>
-                    </label>
-
-                    <?php if ($field['field_type'] === 'text'): ?>
-                        <input type="text" name="fields[<?= $field['id'] ?>]" class="form-control form-input" <?= $field['is_required'] ? 'required' : '' ?>>
-
-                    <?php elseif ($field['field_type'] === 'number'): ?>
-                        <input type="number" name="fields[<?= $field['id'] ?>]" class="form-control form-input" <?= $field['is_required'] ? 'required' : '' ?>>
-
-                    <?php elseif ($field['field_type'] === 'date'): ?>
-                        <input type="date" name="fields[<?= $field['id'] ?>]" class="form-control form-input" <?= $field['is_required'] ? 'required' : '' ?>>
-
-                    <?php elseif ($field['field_type'] === 'radio'): ?>
-                        <div>
-                            <?php foreach ($options as $optIndex => $optValue): ?>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input form-input" type="radio" 
-                                           name="fields[<?= $field['id'] ?>]" 
-                                           id="opt_<?= $field['id'] ?>_<?= $optIndex ?>" 
-                                           value="<?= htmlspecialchars($optValue) ?>" 
-                                           <?= ($field['is_required'] && $optIndex === 0) ? 'checked' : '' ?>>
-                                    <label class="form-check-label" for="opt_<?= $field['id'] ?>_<?= $optIndex ?>">
-                                        <?= htmlspecialchars($optValue) ?>
-                                    </label>
-                                </div>
-                            <?php endforeach; ?>
-                        </div>
-                    <?php endif; ?>
+            <!-- Thông báo kết quả -->
+            <?php if (!empty($message)): ?>
+                <div class="alert alert-<?= $message_type ?> alert-dismissible fade show" role="alert">
+                    <?= $message ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-            <?php endforeach; ?>
+            <?php endif; ?>
 
-            <div class="text-center mt-4 pt-3 border-top">
-                <button type="submit" class="btn btn-success btn-lg px-5">Xác nhận gửi biểu mẫu</button>
-            </div>
-        </form>
+            <!-- Form nhập liệu -->
+            <form method="POST" id="dynamicForm">
+                <?php foreach ($fields as $field): 
+                    $options = !empty($field['options_json']) ? json_decode($field['options_json'], true) : [];
+                ?>
+                    <div class="mb-3 field-group" id="field-wrap-<?= $field['id'] ?>" data-field-id="<?= $field['id'] ?>">
+                        <label class="form-label">
+                            <?= htmlspecialchars($field['label']) ?>
+                            <?php if ($field['is_required']): ?>
+                                <span class="text-required">*</span>
+                            <?php endif; ?>
+                        </label>
+
+                        <?php if ($field['field_type'] === 'text'): ?>
+                            <input type="text" name="fields[<?= $field['id'] ?>]" class="form-control form-input" <?= $field['is_required'] ? 'required' : '' ?>>
+
+                        <?php elseif ($field['field_type'] === 'number'): ?>
+                            <input type="number" name="fields[<?= $field['id'] ?>]" class="form-control form-input" <?= $field['is_required'] ? 'required' : '' ?>>
+
+                        <?php elseif ($field['field_type'] === 'date'): ?>
+                            <input type="date" name="fields[<?= $field['id'] ?>]" class="form-control form-input" <?= $field['is_required'] ? 'required' : '' ?>>
+
+                        <?php elseif ($field['field_type'] === 'radio'): ?>
+                            <div>
+                                <?php foreach ($options as $optIndex => $optValue): ?>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input form-input" type="radio" 
+                                               name="fields[<?= $field['id'] ?>]" 
+                                               id="opt_<?= $field['id'] ?>_<?= $optIndex ?>" 
+                                               value="<?= htmlspecialchars($optValue) ?>" 
+                                               <?= ($field['is_required'] && $optIndex === 0) ? 'checked' : '' ?>>
+                                        <label class="form-check-label" for="opt_<?= $field['id'] ?>_<?= $optIndex ?>">
+                                            <?= htmlspecialchars($optValue) ?>
+                                        </label>
+                                    </div>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+
+                <div class="text-center mt-4 pt-3 border-top">
+                    <button type="submit" class="btn btn-success btn-lg px-5">Xác nhận gửi biểu mẫu</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

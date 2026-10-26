@@ -72,7 +72,7 @@ $forms = $stmt->fetchAll();
 <div class="header-section">
     <!-- ĐOẠN MỚI CHỈ GIỮ LẠI NÚT VỀ CỔNG THÔNG TIN -->
 <div class="d-flex justify-content-start align-items-center mb-3">
-    <a href="index.html" class="btn btn-outline-light btn-sm">
+    <a href="index.php" class="btn btn-outline-light btn-sm">
         <i class="bi bi-arrow-left me-1"></i> Về Cổng Thông Tin
     </a>
 </div>

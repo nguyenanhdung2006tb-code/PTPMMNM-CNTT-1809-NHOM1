@@ -42,20 +42,20 @@
         </button>
 
         <div class="flex items-center">
-    <a href="index.html">
+    <a href="index.php">
         <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
     </a>
 </div>
         <nav class="hidden lg:flex space-x-8 font-medium text-gray-600">
-            <a href="index.html" class="hover:text-green-600 transition-all0">Trang chủ</a>
-            <a href="catalogue.html" class="hover:text-green-600 transition-all">catalogue lịch </a>
-            <a href="dich-vu.html" class="hover:text-green-600 transition-all">Dịch vụ</a>
-            <a href="san-pham.html" class="hover:text-green-600 transition-all">Sản phẩm</a>
+            <a href="index.php" class="hover:text-green-600 transition-all0">Trang chủ</a>
+            <a href="catalogue.php" class="hover:text-green-600 transition-all">catalogue lịch </a>
+            <a href="dich-vu.php" class="hover:text-green-600 transition-all">Dịch vụ</a>
+            <a href="san-pham.php" class="hover:text-green-600 transition-all">Sản phẩm</a>
                         <a href="forms.php" class="hover:text-green-600 transition-all">Đặt in & Khảo sát</a>
             <a href="admin.php" class="hover:text-green-600 transition-all">Quản trị biểu mẫu</a>
-            <a href="in-lich-tet.html" class="hover:text-green-600 transition-all">In lịch Tết</a>
-            <a href="blog.html" class="text-green-600 border-b-2 border-green-600">Blog</a>
-            <a href="About.html" class="hover:text-green-600 transition-all">Về chúng tôi</a>
+            <a href="in-lich-tet.php" class="hover:text-green-600 transition-all">In lịch Tết</a>
+            <a href="blog.php" class="text-green-600 border-b-2 border-green-600">Blog</a>
+            <a href="About.php" class="hover:text-green-600 transition-all">Về chúng tôi</a>
         </nav>
 
         <div class="relative">
@@ -72,23 +72,23 @@
             </div>
         </div>
         <button class="hidden lg:inline-flex bg-green-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md">
-            <a href="lien-he.html" class="text-white">Liên hệ</a>
+            <a href="lien-he.php" class="text-white">Liên hệ</a>
         </button>
     </header>
 
     <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4">
         <nav class="flex flex-col gap-1">
-                <a href="index.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Trang chủ</a>
-                <a href="catalogue.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">catalogue lịch</a>
-                <a href="dich-vu.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Dịch vụ</a>
-                <a href="san-pham.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
+                <a href="index.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Trang chủ</a>
+                <a href="catalogue.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">catalogue lịch</a>
+                <a href="dich-vu.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Dịch vụ</a>
+                <a href="san-pham.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
                             <a href="forms.php" class="block px-4 py-3 rounded-xl bg-emerald-100/60 text-emerald-800 font-bold">📋 Đặt in & Khảo sát (Form Đề tài 11)</a>
             <a href="admin.php" class="block px-4 py-3 rounded-xl bg-amber-100/60 text-amber-800 font-bold">⚙️ Quản trị Biểu mẫu</a>
-            <a href="in-lich-tet.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">In lịch Tết</a>
-                <a href="blog.html" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Blog</a>
-                <a href="About.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
+            <a href="in-lich-tet.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">In lịch Tết</a>
+                <a href="blog.php" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Blog</a>
+                <a href="About.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
         </nav>
-        <a href="lien-he.html" class="mt-3 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
+        <a href="lien-he.php" class="mt-3 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
     </div>
 
 
@@ -117,7 +117,7 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div class="col-span-1 md:col-span-1">
               <div class="flex items-center">
-                <a href="index.html">
+                <a href="index.php">
              <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
                  </a>
             </div>
@@ -126,13 +126,13 @@
             <div>
                 <h5 class="font-bold mb-6">Liên kết nhanh</h5>
                 <ul class="space-y-4 text-gray-500 text-sm">
-                    <li><a href="index.html" class="hover:text-green-600">Trang chủ</a></li>
-                    <li><a href="catalogue.html" class="hover:text-green-600">catalogue lịch</a></li>
-                    <li><a href="dich-vu.html" class="hover:text-green-600">Dịch vụ</a></li>
-                    <li><a href="san-pham.html" class="hover:text-green-600">Sản phẩm</a></li>
-                    <li><a href="blog.html" class="hover:text-green-600">In Lịch Tết</a></li>
-                    <li><a href="blog.html" class="hover:text-green-600">Blog</a></li>
-                    <li><a href="About.html" class="hover:text-green-600">về chúng tôi</a></li>
+                    <li><a href="index.php" class="hover:text-green-600">Trang chủ</a></li>
+                    <li><a href="catalogue.php" class="hover:text-green-600">catalogue lịch</a></li>
+                    <li><a href="dich-vu.php" class="hover:text-green-600">Dịch vụ</a></li>
+                    <li><a href="san-pham.php" class="hover:text-green-600">Sản phẩm</a></li>
+                    <li><a href="blog.php" class="hover:text-green-600">In Lịch Tết</a></li>
+                    <li><a href="blog.php" class="hover:text-green-600">Blog</a></li>
+                    <li><a href="About.php" class="hover:text-green-600">về chúng tôi</a></li>
                 </ul>
             </div>
             <div>
@@ -191,7 +191,7 @@
                             <span class="post-meta mb-4 block font-medium text-brand-orange uppercase tracking-widest">${lnnEscape(featured.tag || 'Nổi bật')}</span>
                             <h2 class="text-3xl font-bold mb-6 hover:text-brand-green transition cursor-pointer">${lnnEscape(featured.title)}</h2>
                             <p class="mb-8">${lnnEscape(featured.excerpt || '')}</p>
-                            <a href="post.html?id=${encodeURIComponent(featured.id)}" class="text-brand-green font-bold flex items-center group">
+                            <a href="post.php?id=${encodeURIComponent(featured.id)}" class="text-brand-green font-bold flex items-center group">
                                 Đọc tiếp <span class="ml-2 group-hover:translate-x-2 transition-transform">→</span>
                             </a>
                         </div>
@@ -203,7 +203,7 @@
             const gridEl = document.getElementById('postGrid');
             gridEl.innerHTML = rest.map(p => `
                 <div class="hover-card group cursor-pointer" data-aos="fade-up">
-                    <a href="post.html?id=${encodeURIComponent(p.id)}" class="block">
+                    <a href="post.php?id=${encodeURIComponent(p.id)}" class="block">
                         <div class="aspect-ratio-box mb-5">
                             <img src="${lnnEscape(p.image)}" alt="${lnnEscape(p.title)}" onerror="this.style.opacity=0.3" data-page-image-slot="1">
                         </div>

@@ -23,21 +23,21 @@
         </button>
 
         <div class="flex items-center">
-            <a href="index.html">
+            <a href="index.php">
                 <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
             </a>
         </div>
 
         <nav class="hidden lg:flex space-x-6 font-medium text-gray-600 items-center">
-            <a href="index.html" class="text-green-600 border-b-2 border-green-600 pb-1">Trang chủ</a>
-            <a href="catalogue.html" class="hover:text-green-600 transition-all">Catalogue lịch</a>
-            <a href="dich-vu.html" class="hover:text-green-600 transition-all">Dịch vụ</a>
-            <a href="san-pham.html" class="hover:text-green-600 transition-all">Sản phẩm</a>
+            <a href="index.php" class="text-green-600 border-b-2 border-green-600 pb-1">Trang chủ</a>
+            <a href="catalogue.php" class="hover:text-green-600 transition-all">Catalogue lịch</a>
+            <a href="dich-vu.php" class="hover:text-green-600 transition-all">Dịch vụ</a>
+            <a href="san-pham.php" class="hover:text-green-600 transition-all">Sản phẩm</a>
             <a href="forms.php" class="hover:text-green-600 transition-all">Đặt in & Khảo sát</a>
             <a href="admin.php" class="hover:text-green-600 transition-all">Quản trị biểu mẫu</a>
-            <a href="in-lich-tet.html" class="hover:text-green-600 transition-all">In lịch Tết</a>
-            <a href="blog.html" class="hover:text-green-600 transition-all">Blog</a>
-            <a href="About.html" class="hover:text-green-600 transition-all">Về chúng tôi</a>
+            <a href="in-lich-tet.php" class="hover:text-green-600 transition-all">In lịch Tết</a>
+            <a href="blog.php" class="hover:text-green-600 transition-all">Blog</a>
+            <a href="About.php" class="hover:text-green-600 transition-all">Về chúng tôi</a>
         </nav>
 
         <div class="relative flex items-center gap-2">
@@ -54,7 +54,7 @@
                 <div id="searchResults" class="max-h-96 overflow-y-auto"></div>
             </div>
             
-            <a href="lien-he.html" class="hidden lg:inline-flex bg-green-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md ml-2">
+            <a href="lien-he.php" class="hidden lg:inline-flex bg-green-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md ml-2">
                 Liên hệ
             </a>
         </div>
@@ -63,17 +63,17 @@
     <!-- Mobile Menu -->
     <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4">
         <nav class="flex flex-col gap-1">
-            <a href="index.html" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Trang chủ</a>
+            <a href="index.php" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Trang chủ</a>
             <a href="forms.php" class="block px-4 py-3 rounded-xl bg-emerald-100/60 text-emerald-800 font-bold">📋 Đặt in & Khảo sát (Form Đề tài 11)</a>
             <a href="admin.php" class="block px-4 py-3 rounded-xl bg-amber-100/60 text-amber-800 font-bold">⚙️ Quản trị Biểu mẫu</a>
-            <a href="catalogue.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Catalogue lịch</a>
-            <a href="dich-vu.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Dịch vụ</a>
-            <a href="san-pham.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
-            <a href="in-lich-tet.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">In lịch Tết</a>
-            <a href="blog.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Blog</a>
-            <a href="About.html" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
+            <a href="catalogue.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Catalogue lịch</a>
+            <a href="dich-vu.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Dịch vụ</a>
+            <a href="san-pham.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
+            <a href="in-lich-tet.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">In lịch Tết</a>
+            <a href="blog.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Blog</a>
+            <a href="About.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
         </nav>
-        <a href="lien-he.html" class="mt-3 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
+        <a href="lien-he.php" class="mt-3 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
     </div>
 
     <!-- BANNER SECTION -->
@@ -93,7 +93,7 @@
                     </p>
                     <div class="flex flex-wrap gap-4">
                         <a href="forms.php" class="btn-primary !px-8 !py-3.5 text-base bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-lg">Đăng ký đặt in mẫu →</a>
-                        <a href="dich-vu.html" class="bg-white/20 hover:bg-white/30 text-white px-6 py-3.5 rounded-xl font-semibold backdrop-blur-sm transition">Khám phá dịch vụ</a>
+                        <a href="dich-vu.php" class="bg-white/20 hover:bg-white/30 text-white px-6 py-3.5 rounded-xl font-semibold backdrop-blur-sm transition">Khám phá dịch vụ</a>
                     </div>
                 </div>
             </div>
@@ -117,7 +117,7 @@
                 <h2 class="text-3xl font-bold mt-3 mb-2">Lịch Mới 2027</h2>
                 <p class="text-gray-500 max-w-xl">Những mẫu lịch Tết 2027 mới nhất, cập nhật liên tục từ xưởng sản xuất — đặt in sớm để kịp mùa Tết.</p>
             </div>
-            <a href="catalogue.html" class="btn-primary !px-6 !py-3 shrink-0 whitespace-nowrap">Xem Catalogue 2027 đầy đủ →</a>
+            <a href="catalogue.php" class="btn-primary !px-6 !py-3 shrink-0 whitespace-nowrap">Xem Catalogue 2027 đầy đủ →</a>
         </div>
 
         <div id="homeFeaturedGrid" class="grid grid-cols-2 lg:grid-cols-4 gap-6"></div>
@@ -164,7 +164,7 @@
         </div>
 
         <div class="text-center mt-12">
-            <a href="dich-vu.html" class="btn-primary !px-8 !py-3">Xem toàn bộ danh mục sản phẩm →</a>
+            <a href="dich-vu.php" class="btn-primary !px-8 !py-3">Xem toàn bộ danh mục sản phẩm →</a>
         </div>
     </section>
 
@@ -252,7 +252,7 @@
             <div id="homeNewsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-10"></div>
 
             <div class="text-center mt-16" data-aos="fade-up">
-                <a href="blog.html" class="inline-block border-b-2 border-brand-green pb-1 text-brand-green font-bold hover:text-brand-dark transition-all">Xem tất cả bài viết →</a>
+                <a href="blog.php" class="inline-block border-b-2 border-brand-green pb-1 text-brand-green font-bold hover:text-brand-dark transition-all">Xem tất cả bài viết →</a>
             </div>
         </div>
     </section>
@@ -262,7 +262,7 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             <div class="col-span-1 md:col-span-1">
                 <div class="flex items-center mb-4">
-                    <a href="index.html">
+                    <a href="index.php">
                         <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
                     </a>
                 </div>
@@ -272,14 +272,14 @@
             <div>
                 <h5 class="font-bold mb-6">Liên kết nhanh</h5>
                 <ul class="space-y-4 text-gray-500 text-sm">
-                    <li><a href="index.html" class="hover:text-green-600">Trang chủ</a></li>
+                    <li><a href="index.php" class="hover:text-green-600">Trang chủ</a></li>
                     <li><a href="forms.php" class="text-emerald-700 font-semibold hover:text-green-600">📋 Đăng ký & Khảo sát (Form)</a></li>
                     <li><a href="admin.php" class="text-amber-700 font-semibold hover:text-amber-800">⚙️ Quản trị Biểu mẫu</a></li>
-                    <li><a href="catalogue.html" class="hover:text-green-600">Catalogue lịch</a></li>
-                    <li><a href="dich-vu.html" class="hover:text-green-600">Dịch vụ</a></li>
-                    <li><a href="san-pham.html" class="hover:text-green-600">Sản phẩm</a></li>
-                    <li><a href="in-lich-tet.html" class="hover:text-green-600">In Lịch Tết</a></li>
-                    <li><a href="About.html" class="hover:text-green-600">Về chúng tôi</a></li>
+                    <li><a href="catalogue.php" class="hover:text-green-600">Catalogue lịch</a></li>
+                    <li><a href="dich-vu.php" class="hover:text-green-600">Dịch vụ</a></li>
+                    <li><a href="san-pham.php" class="hover:text-green-600">Sản phẩm</a></li>
+                    <li><a href="in-lich-tet.php" class="hover:text-green-600">In Lịch Tết</a></li>
+                    <li><a href="About.php" class="hover:text-green-600">Về chúng tôi</a></li>
                 </ul>
             </div>
 
@@ -357,7 +357,7 @@
             if (!el) return;
             el.innerHTML = posts.map((p, i) => `
                 <div class="hover-card group cursor-pointer" data-aos="fade-up" data-aos-delay="${i * 100}">
-                    <a href="post.html?id=${encodeURIComponent(p.id)}" class="block">
+                    <a href="post.php?id=${encodeURIComponent(p.id)}" class="block">
                         <div class="aspect-ratio-box mb-5">
                             <img src="${lnnEscape(p.image)}" alt="${lnnEscape(p.title)}" onerror="this.style.opacity=0.3" data-page-image-slot="6">
                         </div>

@@ -166,7 +166,7 @@ $chart_values = array_values($chart_counts);
 
             <!-- NÚT ĐIỀU HƯỚNG VỀ TRANG CHỦ & TẠO FORM MỚI -->
             <div class="px-3 mb-3 d-flex flex-column gap-2">
-                <a href="index.html" class="btn btn-outline-light w-100 py-2 d-flex align-items-center justify-content-center gap-2">
+                <a href="index.php" class="btn btn-outline-light w-100 py-2 d-flex align-items-center justify-content-center gap-2">
                     <i class="bi bi-house-door"></i> Về Trang Chủ Cổng Tin
                 </a>
                 <a href="builder.php" class="btn btn-warning text-dark fw-bold w-100 py-2 shadow-sm d-flex align-items-center justify-content-center gap-2">
@@ -223,7 +223,7 @@ $chart_values = array_values($chart_counts);
                     <p class="text-muted mb-0">Biểu mẫu đang xem: <strong class="text-dark"><?= htmlspecialchars($current_form_title) ?></strong></p>
                 </div>
                 <div class="d-flex gap-2">
-                    <a href="index.html" class="btn btn-outline-secondary">
+                    <a href="index.php" class="btn btn-outline-secondary">
                         <i class="bi bi-arrow-left me-1"></i> Trang chủ
                     </a>
                     <a href="export.php?form_id=<?= $selected_form_id ?>" class="btn btn-success fw-semibold shadow-sm">

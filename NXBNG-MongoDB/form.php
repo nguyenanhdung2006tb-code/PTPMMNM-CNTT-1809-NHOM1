@@ -112,8 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="form-wrapper">
         <!-- THANH ĐIỀU HƯỚNG QUAY LẠI TRANG CHỦ & QUẢN TRỊ -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <a href="index.html" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-house-door me-1"></i> Về Trang Chủ Cổng Tin
+            <a href="forms.php" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Danh Sách Biểu Mẫu
             </a>
             <a href="admin.php?form_id=<?= $form_id ?>" class="btn btn-outline-success btn-sm">
                 <i class="bi bi-speedometer2 me-1"></i> Đến Trang Quản Trị

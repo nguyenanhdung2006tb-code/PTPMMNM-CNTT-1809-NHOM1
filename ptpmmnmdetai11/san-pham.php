@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/check_login.php'; ?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>

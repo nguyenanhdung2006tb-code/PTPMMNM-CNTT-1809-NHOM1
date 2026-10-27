@@ -1,5 +1,6 @@
-<?php
-require_once 'config/db.php';
+<?php 
+require_once __DIR__ . '/check_login.php'; 
+require_once __DIR__ . '/config/db.php';
 
 $form_id = isset($_GET['id']) ? (int)$_GET['id'] : 1;
 $message = '';
@@ -86,6 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($form['title']) ?> - NXB Nông Nghiệp</title>
+    <link rel="icon" href="image/x2Mf_logo (1).png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
@@ -112,12 +114,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="form-wrapper">
         <!-- THANH ĐIỀU HƯỚNG QUAY LẠI TRANG CHỦ & QUẢN TRỊ -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <a href="forms.php" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-arrow-left me-1"></i> Danh Sách Biểu Mẫu
+            <a href="forms.php" class="btn btn-outline-secondary btn-sm shadow-sm">
+                <i class="bi bi-arrow-left me-1"></i> Danh Sách Biểu Mẫu
             </a>
-            <a href="admin/index.php?form_id=<?= $form_id ?>" class="btn btn-outline-success btn-sm">
-                <i class="bi bi-speedometer2 me-1"></i> Đến Trang Quản Trị
-            </a>
+
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                <a href="admin/" class="btn btn-outline-success btn-sm shadow-sm">
+                    <i class="bi bi-gear-fill me-1"></i> Đến Trang Quản Trị
+                </a>
+            <?php endif; ?>
         </div>
 
         <div class="form-container">
@@ -141,6 +146,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST" id="dynamicForm">
                 <?php foreach ($fields as $field): 
                     $options = !empty($field['options_json']) ? json_decode($field['options_json'], true) : [];
+                    
+                    // Tự động điền họ tên khách nếu trường yêu cầu họ tên
+                    $default_value = '';
+                    $label_lower = mb_strtolower($field['label'], 'UTF-8');
+                    if (isset($_SESSION['fullname']) && (str_contains($label_lower, 'họ và tên') || str_contains($label_lower, 'họ tên') || str_contains($label_lower, 'người liên hệ'))) {
+                        $default_value = htmlspecialchars($_SESSION['fullname']);
+                    }
                 ?>
                     <div class="mb-3 field-group" id="field-wrap-<?= $field['id'] ?>" data-field-id="<?= $field['id'] ?>">
                         <label class="form-label">
@@ -151,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </label>
 
                         <?php if ($field['field_type'] === 'text'): ?>
-                            <input type="text" name="fields[<?= $field['id'] ?>]" class="form-control form-input" <?= $field['is_required'] ? 'required' : '' ?>>
+                            <input type="text" name="fields[<?= $field['id'] ?>]" value="<?= $default_value ?>" class="form-control form-input" <?= $field['is_required'] ? 'required' : '' ?>>
 
                         <?php elseif ($field['field_type'] === 'number'): ?>
                             <input type="number" name="fields[<?= $field['id'] ?>]" class="form-control form-input" <?= $field['is_required'] ? 'required' : '' ?>>
@@ -191,7 +203,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 const conditions = <?= json_encode($conditions) ?>;
 
 function evaluateConditions() {
-    // Thu thập giá trị hiện tại của tất cả các trường
     const fieldValues = {};
     document.querySelectorAll('.field-group').forEach(group => {
         const fid = group.dataset.fieldId;
@@ -207,17 +218,15 @@ function evaluateConditions() {
         }
     });
 
-    // Mặc định ẩn các trường là mục tiêu của điều kiện show
     conditions.forEach(cond => {
         const targetWrap = document.getElementById('field-wrap-' + cond.target_field_id);
         if (targetWrap) {
             targetWrap.classList.add('condition-hidden');
             const input = targetWrap.querySelector('.form-input');
-            if (input) input.disabled = true; // Vô hiệu hóa để không gửi lên nếu bị ẩn
+            if (input) input.disabled = true;
         }
     });
 
-    // Kiểm tra điều kiện thỏa mãn để hiển thị lại
     conditions.forEach(cond => {
         const currentVal = fieldValues[cond.source_field_id];
         const targetWrap = document.getElementById('field-wrap-' + cond.target_field_id);
@@ -230,7 +239,6 @@ function evaluateConditions() {
     });
 }
 
-// Bắt sự kiện người dùng thay đổi dữ liệu trên biểu mẫu
 document.addEventListener('DOMContentLoaded', () => {
     evaluateConditions();
     document.getElementById('dynamicForm').addEventListener('change', evaluateConditions);

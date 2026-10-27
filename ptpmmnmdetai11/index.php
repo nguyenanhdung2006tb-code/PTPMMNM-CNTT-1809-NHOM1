@@ -1,3 +1,8 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -17,7 +22,7 @@
 <body class="bg-white">
 
     <!-- HEADER / NAVIGATION -->
-   <header class="bg-white sticky top-0 z-50 shadow-sm px-4 md:px-16 py-4 flex items-center justify-between">
+    <header class="bg-white sticky top-0 z-50 shadow-sm px-4 md:px-16 py-4 flex items-center justify-between">
         <button id="menuBtn" type="button" class="lg:hidden w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition order-last" aria-label="Mở menu" aria-expanded="false">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
@@ -34,7 +39,12 @@
             <a href="dich-vu.php" class="hover:text-green-600 transition-all">Dịch vụ</a>
             <a href="san-pham.php" class="hover:text-green-600 transition-all">Sản phẩm</a>
             <a href="forms.php" class="hover:text-green-600 transition-all">Đặt in & Khảo sát</a>
-            <a href="admin/" class="hover:text-green-600 transition-all">Quản trị biểu mẫu</a>
+
+            <!-- Chỉ Admin mới nhìn thấy mục Quản trị biểu mẫu -->
+           <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+           <a href="admin/" class="block px-4 py-3 rounded-xl text-gray-700 hover:text-green-600 hover:bg-gray-50 font-semibold">Quản trị biểu mẫu</a>
+           <?php endif; ?>
+
             <a href="in-lich-tet.php" class="hover:text-green-600 transition-all">In lịch Tết</a>
             <a href="blog.php" class="hover:text-green-600 transition-all">Blog</a>
             <a href="About.php" class="hover:text-green-600 transition-all">Về chúng tôi</a>
@@ -53,8 +63,31 @@
                 </div>
                 <div id="searchResults" class="max-h-96 overflow-y-auto"></div>
             </div>
-            
-            <a href="lien-he.php" class="hidden lg:inline-flex bg-green-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md ml-2">
+
+            <!-- CỤM TÀI KHOẢN: NẾU ĐÃ ĐĂNG NHẬP -->
+            <?php if (isset($_SESSION['username'])): ?>
+                <div class="hidden lg:flex items-center gap-2 pl-3 border-l border-gray-200">
+                    <div class="text-right">
+                        <span class="text-xs text-gray-400 block leading-tight">Tài khoản</span>
+                        <span class="text-sm font-bold text-gray-800"><?= htmlspecialchars($_SESSION['fullname']) ?></span>
+                    </div>
+                    <a href="logout.php" title="Đăng xuất" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-all ml-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+                    </a>
+                </div>
+            <!-- NẾU CHƯA ĐĂNG NHẬP: HIỆN CẢ ĐĂNG KÝ VÀ ĐĂNG NHẬP -->
+            <?php else: ?>
+                <div class="hidden lg:flex items-center gap-2">
+                    <a href="register.php" class="text-sm font-semibold text-gray-600 hover:text-green-600 px-3 py-2 rounded-lg transition-all">
+                        Đăng ký
+                    </a>
+                    <a href="login.php" class="text-sm font-semibold text-green-700 hover:text-green-800 bg-green-50 px-3.5 py-2 rounded-lg transition-all">
+                        Đăng nhập
+                    </a>
+                </div>
+            <?php endif; ?>
+
+            <a href="lien-he.php" class="hidden lg:inline-flex bg-green-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md ml-1">
                 Liên hệ
             </a>
         </div>
@@ -65,7 +98,12 @@
         <nav class="flex flex-col gap-1">
             <a href="index.php" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Trang chủ</a>
             <a href="forms.php" class="block px-4 py-3 rounded-xl bg-emerald-100/60 text-emerald-800 font-bold">📋 Đặt in & Khảo sát (Form Đề tài 11)</a>
-            <a href="admin/" class="block px-4 py-3 rounded-xl bg-amber-100/60 text-amber-800 font-bold">⚙️ Quản trị Biểu mẫu</a>
+
+            <!-- Chỉ Admin mới thấy nút quản trị trên Mobile -->
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                <a href="admin/" class="block px-4 py-3 rounded-xl bg-amber-100/60 text-amber-800 font-bold">⚙️ Quản trị Biểu mẫu</a>
+            <?php endif; ?>
+
             <a href="catalogue.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Catalogue lịch</a>
             <a href="dich-vu.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Dịch vụ</a>
             <a href="san-pham.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Sản phẩm</a>
@@ -73,7 +111,18 @@
             <a href="blog.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Blog</a>
             <a href="About.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
         </nav>
-        <a href="lien-he.php" class="mt-3 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
+
+        <!-- Trạng thái tài khoản trên Mobile -->
+        <?php if (isset($_SESSION['username'])): ?>
+            <div class="mt-3 p-3 bg-gray-50 rounded-xl flex items-center justify-between border border-gray-100">
+                <span class="text-sm text-gray-700">Tài khoản: <strong class="text-green-700"><?= htmlspecialchars($_SESSION['fullname']) ?></strong></span>
+                <a href="logout.php" class="text-xs bg-red-50 text-red-600 font-bold px-3 py-1.5 rounded-lg hover:bg-red-100 transition">Đăng xuất</a>
+            </div>
+        <?php else: ?>
+            <a href="login.php" class="mt-3 block text-center border-2 border-green-500 text-green-600 px-6 py-2.5 rounded-xl font-bold hover:bg-green-50 transition-all">Đăng nhập</a>
+        <?php endif; ?>
+
+        <a href="lien-he.php" class="mt-2 block text-center bg-green-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-all shadow-md">Liên hệ</a>
     </div>
 
     <!-- BANNER SECTION -->
@@ -274,7 +323,12 @@
                 <ul class="space-y-4 text-gray-500 text-sm">
                     <li><a href="index.php" class="hover:text-green-600">Trang chủ</a></li>
                     <li><a href="forms.php" class="text-emerald-700 font-semibold hover:text-green-600">📋 Đăng ký & Khảo sát (Form)</a></li>
-                    <li><a href="admin/" class="text-amber-700 font-semibold hover:text-amber-800">⚙️ Quản trị Biểu mẫu</a></li>
+
+                    <!-- Ẩn Quản trị biểu mẫu ở footer nếu không phải admin -->
+                   <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                   <li><a href="admin/" class="hover:text-green-600">Quản trị biểu mẫu</a></li>
+                   <?php endif; ?>
+
                     <li><a href="catalogue.php" class="hover:text-green-600">Catalogue lịch</a></li>
                     <li><a href="dich-vu.php" class="hover:text-green-600">Dịch vụ</a></li>
                     <li><a href="san-pham.php" class="hover:text-green-600">Sản phẩm</a></li>

@@ -1,3 +1,15 @@
+<?php require_once __DIR__ . '/check_login.php'; ?>
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Nếu khách chưa đăng nhập, bắt buộc chuyển hướng sang trang login
+if (!isset($_SESSION['username'])) {
+    header('Location: login.php');
+    exit;
+}
+?>
 <?php
 require_once 'config/db.php';
 

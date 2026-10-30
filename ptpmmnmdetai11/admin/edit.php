@@ -72,7 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $options_json = null;
                 if (in_array($type, ['radio', 'checkbox']) && !empty($options_raw)) {
-                    $opts_array = array_map('trim', explode(',', $options_raw));
+                    // Tách bằng dấu gạch chéo / hoặc dấu gạch đứng |
+                    $opts_array = preg_split('/[\/|]/', $options_raw);
+                    $opts_array = array_map('trim', $opts_array);
                     $options_json = json_encode(array_values(array_filter($opts_array)), JSON_UNESCAPED_UNICODE);
                 }
 
@@ -270,9 +272,10 @@ function addQuestion(fieldId = 0, defaultLabel = '', defaultType = 'text', defau
             
             <div class="col-12 options-row" id="optionsRow_${questionCounter}" style="display: ${(defaultType === 'radio' || defaultType === 'checkbox') ? 'block' : 'none'};">
                 <label class="form-label small fw-semibold text-success">
-                    <i class="bi bi-card-checklist me-1"></i> Các lựa chọn (ngăn cách bằng dấu phẩy)
+                    <i class="bi bi-card-checklist me-1"></i> Các lựa chọn (ngăn cách bằng dấu gạch / hoặc |)
                 </label>
-                <input type="text" name="questions[${questionCounter}][options]" class="form-control" value="${defaultOptions}" placeholder="Ví dụ: Lựa chọn A, Lựa chọn B, Lựa chọn C">
+                <input type="text" name="questions[${questionCounter}][options]" class="form-control" value="${defaultOptions}" placeholder="Ví dụ: Trồng trọt, BVTV / Chăn nuôi gia súc / Thủy hải sản">
+                <small class="text-muted" style="font-size: 11px;">* Bạn có thể tự do dùng dấu phẩy bên trong từng đáp án mà không sợ bị cắt nhầm.</small>
             </div>
 
             <div class="col-12">
@@ -314,7 +317,7 @@ window.addEventListener('DOMContentLoaded', () => {
             if (q.options_json) {
                 try {
                     const arr = JSON.parse(q.options_json);
-                    opts = arr.join(', ');
+                    opts = arr.join(' / '); // Tự động nối lại bằng dấu gạch /
                 } catch(e) {}
             }
             addQuestion(q.id, q.label, q.field_type, opts, q.is_required == 1);

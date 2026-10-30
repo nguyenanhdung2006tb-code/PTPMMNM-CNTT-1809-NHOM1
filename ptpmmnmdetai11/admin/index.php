@@ -26,7 +26,7 @@ foreach ($forms as $f) {
 
 // 3. Lấy danh sách các câu hỏi của phiên bản form hiện tại
 $stmt_fields = $pdo->prepare("
-    SELECT f.id, f.label, f.field_type 
+    SELECT f.id, f.label, f.field_type, f.options_json 
     FROM fields f
     JOIN form_versions v ON f.form_version_id = v.id
     WHERE v.form_id = ? AND v.is_active = 1
@@ -62,35 +62,62 @@ if (!empty($response_ids)) {
     }
 }
 
-// 5. TÍNH TOÁN DỮ LIỆU KPI & BIỂU ĐỒ (CHART.JS)
+// 5. TỔNG HỢP DỮ LIỆU ĐA DẠNG CHO CẢ 5 LOẠI TRƯỜNG DỮ LIỆU
 $total_count = count($responses);
 $seven_days_ago = date('Y-m-d H:i:s', strtotime('-7 days'));
 $recent_count = 0;
-
-$chart_field = null;
-foreach ($fields as $f) {
-    if ($f['field_type'] === 'radio') {
-        $chart_field = $f;
-        break;
-    }
-}
-
-$chart_counts = [];
 foreach ($responses as $resp) {
     if ($resp['submitted_at'] >= $seven_days_ago) {
         $recent_count++;
     }
+}
 
-    if ($chart_field) {
-        $val = $answers_map[$resp['response_id']][$chart_field['id']] ?? '';
-        if ($val !== '') {
-            $chart_counts[$val] = ($chart_counts[$val] ?? 0) + 1;
+$chart_dataset_all = [];
+$default_chart_field_id = 0;
+
+foreach (['radio', 'checkbox', 'number', 'date', 'text'] as $priority_type) {
+    foreach ($fields as $f) {
+        if ($f['field_type'] === $priority_type) {
+            $default_chart_field_id = $f['id'];
+            break 2;
         }
     }
 }
+if ($default_chart_field_id === 0 && !empty($fields)) {
+    $default_chart_field_id = $fields[0]['id'];
+}
 
-$chart_labels = array_keys($chart_counts);
-$chart_values = array_values($chart_counts);
+foreach ($fields as $f) {
+    $fid = $f['id'];
+    $ftype = $f['field_type'];
+    $counts = [];
+
+    foreach ($responses as $resp) {
+        $raw_val = $answers_map[$resp['response_id']][$fid] ?? '';
+        if ($raw_val !== '') {
+            if ($ftype === 'checkbox') {
+                $parts = explode(',', $raw_val);
+                foreach ($parts as $p) {
+                    $p = trim($p);
+                    if ($p !== '') {
+                        $counts[$p] = ($counts[$p] ?? 0) + 1;
+                    }
+                }
+            } else {
+                $counts[$raw_val] = ($counts[$raw_val] ?? 0) + 1;
+            }
+        }
+    }
+
+    $chart_dataset_all[$fid] = [
+        'field_id' => $fid,
+        'label' => $f['label'],
+        'type' => $ftype,
+        'labels' => array_keys($counts),
+        'values' => array_values($counts),
+        'total_entries' => array_sum($counts)
+    ];
+}
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -118,24 +145,24 @@ $chart_values = array_values($chart_counts);
         }
 
         body { 
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif; 
             background-color: var(--bg-page); 
-            color: var(--text-dark);
-            min-height: 100vh;
+            color: var(--text-dark); 
+            min-height: 100vh; 
         }
 
         .sidebar { 
             background: var(--sidebar-bg); 
             height: 100vh; 
-            position: sticky;
-            top: 0;
+            position: sticky; 
+            top: 0; 
             color: #fff; 
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid #1e293b;
-            z-index: 100;
-            overflow: hidden;
+            padding: 24px 16px; 
+            display: flex; 
+            flex-direction: column; 
+            border-right: 1px solid #1e293b; 
+            z-index: 100; 
+            overflow: hidden; 
         }
 
         .brand-header {
@@ -178,10 +205,7 @@ $chart_values = array_values($chart_counts);
             box-shadow: 0 4px 12px rgba(22, 163, 74, 0.25);
         }
 
-        .sidebar-search-box {
-            flex-shrink: 0;
-        }
-
+        .sidebar-search-box { flex-shrink: 0; }
         .sidebar-search-box input {
             background-color: #1e293b !important;
             border: 1px solid #334155 !important;
@@ -217,6 +241,40 @@ $chart_values = array_values($chart_counts);
             justify-content: center;
             font-size: 1.3rem;
             flex-shrink: 0;
+        }
+
+        /* TÙY BIẾN Ô CHỌN CÂU HỎI BIỂU ĐỒ - CỐ ĐỊNH RỘNG VÀ ĐỆM AN TOÀN CHỐNG ĐÈ CHỮ */
+        .chart-select-custom {
+            width: 240px !important;
+            height: 33px;
+            font-size: 12px !important;
+            font-weight: 600;
+            color: #166534 !important;
+            background-color: #ecfdf5 !important;
+            border: 1.5px solid #a7f3d0 !important;
+            border-radius: 8px;
+            padding: 4px 34px 4px 12px !important;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%2316a34a' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: right 10px center !important;
+            background-size: 12px 10px !important;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+        .chart-select-custom:hover {
+            background-color: #d1fae5 !important;
+            border-color: #6ee7b7 !important;
+        }
+        .chart-select-custom:focus {
+            border-color: #16a34a !important;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15) !important;
+            outline: none;
         }
 
         .main-card { 
@@ -269,8 +327,7 @@ $chart_values = array_values($chart_counts);
             background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
             color: #ffffff;
             font-weight: 600;
-            border-radius: 9px;
-            padding: 8px 18px;
+            border-radius: 8px;
             border: none;
             transition: all 0.2s ease;
         }
@@ -283,10 +340,8 @@ $chart_values = array_values($chart_counts);
         .btn-excel-soft {
             background-color: #ecfdf5;
             color: #166534;
-            border: 1.5px solid #a7f3d0;
+            border: 1px solid #a7f3d0;
             font-weight: 600;
-            border-radius: 9px;
-            padding: 8px 16px;
             transition: all 0.2s ease;
             text-decoration: none;
             display: inline-flex;
@@ -296,7 +351,6 @@ $chart_values = array_values($chart_counts);
             background-color: #d1fae5;
             border-color: #6ee7b7;
             color: #065f46;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
         }
 
         .custom-toast {
@@ -318,16 +372,9 @@ $chart_values = array_values($chart_counts);
             transition: all 0.3s ease;
             pointer-events: none;
         }
-        .custom-toast.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .custom-toast.show { opacity: 1; transform: translateY(0); }
 
-        @page {
-            size: landscape;
-            margin: 8mm;
-        }
-
+        @page { size: landscape; margin: 8mm; }
         @media print {
             body { background: #ffffff !important; font-size: 10px !important; }
             .sidebar, .btn, .no-print, .input-group, #toolbarArea, .kpi-section, .sticky-col-right { display: none !important; }
@@ -367,12 +414,9 @@ $chart_values = array_values($chart_counts);
                 <a href="../index.php" class="btn btn-outline-light btn-sm py-2 d-flex align-items-center justify-content-center gap-2" style="border-color: #334155; color: #cbd5e1;">
                     <i class="bi bi-house-door"></i> Về Cổng Thông Tin Web
                 </a>
-                <a href="../forms.php" class="btn btn-outline-success text-light btn-sm py-2 d-flex align-items-center justify-content-center gap-2" style="border-color: #22c55e;">
-                    <i class="bi bi-grid-fill text-success"></i> Xem Giao Diện Client
-                </a>
-                <a href="builder.php" class="btn btn-primary-emerald btn-sm py-2 d-flex align-items-center justify-content-center gap-2 shadow-sm">
-                    <i class="bi bi-plus-circle-fill"></i> Tạo biểu mẫu mới
-                </a>
+              <a href="../forms.php" class="btn btn-outline-success text-light btn-sm py-2 d-flex align-items-center justify-content-center gap-2" style="border-color: #22c55e;">
+                    <i class="bi bi-grid-fill text-success"></i> Xem danh sách biểu mẫu
+              </a>
             </div>
 
             <div class="mb-3 sidebar-search-box">
@@ -436,45 +480,75 @@ $chart_values = array_values($chart_counts);
                 </div>
             <?php endif; ?>
 
-            <!-- Header với nút "Sửa biểu mẫu" -->
-            <div class="mb-4">
-                <div class="row align-items-center g-3">
-                    <div class="col-lg-5 col-xl-5">
-                        <h4 class="fw-bold text-dark mb-1">Dữ Liệu Khảo Sát Đã Thu Thập</h4>
-                        <div class="text-muted small text-truncate" style="max-width: 100%;" title="<?= htmlspecialchars($current_form_title) ?>">
-                            Biểu mẫu đang xem: <strong class="text-success"><?= htmlspecialchars($current_form_title) ?></strong> 
-                            <span class="badge bg-light text-secondary border ms-1">Mã #<?= $selected_form_id ?></span>
-                        </div>
+            <?php if (isset($_GET['form_deleted'])): ?>
+                <div class="alert alert-success alert-dismissible fade show shadow-sm d-flex align-items-center border-0 mb-4" style="background-color: #ecfdf5; color: #065f46;" role="alert">
+                    <i class="bi bi-check-circle-fill fs-5 me-2 text-success"></i>
+                    <div><strong>Đã xóa biểu mẫu thành công!</strong> Toàn bộ câu hỏi và dữ liệu khảo sát liên quan đã được dọn dẹp sạch sẽ.</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            <?php endif; ?>
+
+            <!-- CỤM HEADER CHUẨN MỰC: NÚT "TẠO FORM MỚI" ĐƯA LÊN TRÊN & GOM NHÓM KHOA HỌC -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                <div style="min-width: 250px; max-width: 400px;">
+                    <h4 class="fw-bold text-dark mb-1">Dữ Liệu Khảo Sát Đã Thu Thập</h4>
+                    <div class="text-muted small text-truncate" title="<?= htmlspecialchars($current_form_title) ?>">
+                        Biểu mẫu: <strong class="text-success"><?= htmlspecialchars($current_form_title) ?></strong> 
+                        <span class="badge bg-light text-secondary border ms-1">Mã #<?= $selected_form_id ?></span>
                     </div>
-                    <div class="col-lg-7 col-xl-7 text-lg-end">
-                        <div class="d-inline-flex gap-2 flex-wrap justify-content-lg-end">
-                            <button type="button" class="btn btn-primary-emerald shadow-sm text-nowrap" onclick="copyAdminShareLink(<?= $selected_form_id ?>, '<?= htmlspecialchars($current_form_title, ENT_QUOTES) ?>')">
-                                <i class="bi bi-link-45deg me-1"></i> Sao chép link gửi khách
-                            </button>
+                </div>
 
-                            <!-- NÚT SỬA BIỂU MẪU MỚI THÊM VÀO -->
-                            <a href="edit.php?id=<?= $selected_form_id ?>" class="btn btn-outline-secondary text-nowrap" title="Chỉnh sửa nội dung và câu hỏi của biểu mẫu này">
-                                <i class="bi bi-pencil-square me-1"></i> Sửa biểu mẫu
-                            </a>
+                <!-- CỤM ACTION TOOLBAR ĐƯỢC GOM NHÓM GỌN GÀNG, KHÔNG BAO GIỜ BỊ RỚT DÒNG HOẶC LỘN XỘN -->
+                <div class="d-flex align-items-center gap-2 flex-wrap">
+                    
+                    <!-- 1. Nút Tạo Biểu Mẫu Mới (Được đưa lên trên cùng nổi bật) -->
+                    <a href="builder.php" class="btn btn-primary-emerald btn-sm py-2 px-3 shadow-sm d-flex align-items-center gap-1.5 text-nowrap">
+                        <i class="bi bi-plus-circle-fill"></i>
+                        <span>Tạo form mới</span>
+                    </a>
 
-                            <a href="export.php?form_id=<?= $selected_form_id ?>" class="btn btn-excel-soft shadow-sm text-nowrap">
-                                <i class="bi bi-file-earmark-excel-fill text-success fs-6 me-1.5"></i>
-                                <span>Xuất Excel (CSV)</span>
-                            </a>
-
-                            <a href="../form.php?id=<?= $selected_form_id ?>" target="_blank" class="btn btn-outline-secondary text-nowrap">
-                                <i class="bi bi-box-arrow-up-right me-1"></i> Mở trang điền
-                            </a>
-
-                            <button onclick="window.print()" class="btn btn-outline-secondary text-nowrap" title="In danh sách">
-                                <i class="bi bi-printer"></i>
-                            </button>
-                        </div>
+                    <!-- 2. Nhóm Quản Trị Cấu Trúc Form (Sửa / Xóa) -->
+                    <div class="btn-group btn-group-sm shadow-sm" role="group">
+                        <a href="edit.php?id=<?= $selected_form_id ?>" class="btn btn-outline-secondary py-2 px-2.5 d-flex align-items-center gap-1 text-nowrap" title="Chỉnh sửa cấu trúc biểu mẫu này">
+                            <i class="bi bi-pencil-square text-primary"></i>
+                            <span>Sửa</span>
+                        </a>
+                        <a href="delete_form.php?id=<?= $selected_form_id ?>" 
+                           class="btn btn-outline-danger py-2 px-2.5 d-flex align-items-center gap-1 text-nowrap" 
+                           onclick="return confirm('CẢNH BÁO XÓA FORM:\n\nBạn có chắc chắn muốn xóa vĩnh viễn biểu mẫu #<?= $selected_form_id ?> (<?= htmlspecialchars($current_form_title, ENT_QUOTES) ?>)?\n\nToàn bộ câu hỏi và mọi phản hồi của khách hàng sẽ bị xóa sạch!');"
+                           title="Xóa vĩnh viễn biểu mẫu này">
+                            <i class="bi bi-trash3"></i>
+                            <span>Xóa</span>
+                        </a>
                     </div>
+
+                    <!-- 3. Nhóm Phân Phối & Xem Form (Copy link / Mở trang điền) -->
+                    <div class="btn-group btn-group-sm shadow-sm" role="group">
+                        <button type="button" class="btn btn-outline-success py-2 px-2.5 d-flex align-items-center gap-1 text-nowrap" onclick="copyAdminShareLink(<?= $selected_form_id ?>, '<?= htmlspecialchars($current_form_title, ENT_QUOTES) ?>')" title="Sao chép link gửi khách hàng">
+                            <i class="bi bi-link-45deg fs-6"></i>
+                            <span>Copy link</span>
+                        </button>
+                        <a href="../form.php?id=<?= $selected_form_id ?>" target="_blank" class="btn btn-outline-secondary py-2 px-2.5 d-flex align-items-center gap-1 text-nowrap" title="Mở trang điền dành cho khách">
+                            <i class="bi bi-box-arrow-up-right"></i>
+                            <span>Mở form</span>
+                        </a>
+                    </div>
+
+                    <!-- 4. Nhóm Trích Xuất Dữ Liệu (Xuất Excel / In ấn) -->
+                    <div class="btn-group btn-group-sm shadow-sm" role="group">
+                        <a href="export.php?form_id=<?= $selected_form_id ?>" class="btn btn-excel-soft py-2 px-2.5 d-flex align-items-center gap-1 text-nowrap" title="Xuất dữ liệu Excel (.csv)">
+                            <i class="bi bi-file-earmark-excel-fill text-success"></i>
+                            <span>Xuất Excel</span>
+                        </a>
+                        <button onclick="window.print()" class="btn btn-outline-secondary py-2 px-2.5" title="In danh sách dữ liệu (Ctrl+P)">
+                            <i class="bi bi-printer"></i>
+                        </button>
+                    </div>
+
                 </div>
             </div>
 
-            <!-- Khối KPI đồng bộ vị trí -->
+            <!-- KHỐI KPI & BIỂU ĐỒ TRÒN (ĐÃ FIX ĐỒNG BỘ 100% CHIỀU CAO VÀ RỘNG, KHÔNG DÍNH MŨI TÊN) -->
             <div class="row g-3 mb-4 kpi-section align-items-stretch">
                 <div class="col-lg-7 d-flex flex-column justify-content-between gap-3">
                     <div class="row g-3">
@@ -511,27 +585,33 @@ $chart_values = array_values($chart_counts);
                         </div>
                         <div class="overflow-hidden" style="flex: 1;">
                             <div class="text-muted small fw-semibold text-uppercase" style="letter-spacing: 0.5px;">CHỈ SỐ TRỌNG YẾU</div>
-                            <div class="fw-bold text-dark text-truncate mt-1" title="<?= $chart_field ? htmlspecialchars($chart_field['label']) : 'Cơ cấu phản hồi' ?>">
-                                <?= $chart_field ? htmlspecialchars($chart_field['label']) : 'Cơ cấu phản hồi' ?>
-                            </div>
-                            <small class="text-muted">
-                                <?= count($chart_counts) > 0 ? 'Đã phân loại thành ' . count($chart_counts) . ' nhóm dữ liệu' : 'Chưa có phân loại trắc nghiệm' ?>
-                            </small>
+                            <div class="fw-bold text-dark text-truncate mt-1" id="kpiFieldTitle">...</div>
+                            <small class="text-muted" id="kpiFieldSub">...</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="col-lg-5">
-                    <div class="kpi-card h-100 d-flex flex-column justify-content-between">
-                        <div class="fw-bold text-dark small text-uppercase" style="letter-spacing: 0.5px;">
-                            <i class="bi bi-pie-chart text-success me-1"></i> Phân bố: <?= $chart_field ? htmlspecialchars($chart_field['label']) : 'Khách hàng' ?>
+                    <div class="kpi-card h-100 d-flex flex-column justify-content-between" style="min-height: 220px;">
+                        <div class="d-flex justify-content-between align-items-center mb-2 gap-2">
+                            <div class="fw-bold text-dark small text-uppercase text-nowrap" style="letter-spacing: 0.5px;">
+                                <i class="bi bi-pie-chart text-success me-1"></i> Biểu đồ
+                            </div>
+                            
+                            <!-- ĐÃ FIX TRIỆT ĐỂ: CỐ ĐỊNH RỘNG 240PX CHO MỌI FORM, ĐỆM PHẢI 34PX CHỐNG ĐÈ MŨI TÊN -->
+                            <select id="selectChartField" class="chart-select-custom shadow-sm" title="Chọn trường để phân tích dữ liệu">
+                                <?php foreach ($fields as $f): ?>
+                                    <option value="<?= $f['id'] ?>" <?= $f['id'] == $default_chart_field_id ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($f['label']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                         <div style="position: relative; height: 165px; display: flex; justify-content: center; align-items: center;">
-                            <?php if (!empty($chart_values)): ?>
-                                <canvas id="analyticsChart"></canvas>
-                            <?php else: ?>
-                                <span class="text-muted fst-italic small">Chưa có dữ liệu trắc nghiệm để vẽ biểu đồ</span>
-                            <?php endif; ?>
+                            <canvas id="analyticsChart"></canvas>
+                            <div id="noChartDataNotice" class="text-muted fst-italic small text-center" style="display: none;">
+                                Chưa có dữ liệu phản hồi cho câu hỏi này
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -675,33 +755,79 @@ $chart_values = array_values($chart_counts);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-<?php if (!empty($chart_values)): ?>
-const ctx = document.getElementById('analyticsChart').getContext('2d');
-new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: <?= json_encode($chart_labels) ?>,
-        datasets: [{
-            data: <?= json_encode($chart_values) ?>,
-            backgroundColor: [
-                '#16a34a', '#3b82f6', '#f59e0b', '#8b5cf6', '#06b6d4', '#64748b'
-            ],
-            borderWidth: 2,
-            hoverOffset: 4
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom',
-                labels: { boxWidth: 12, font: { size: 11 } }
-            }
+const chartDataMap = <?= json_encode($chart_dataset_all, JSON_UNESCAPED_UNICODE) ?>;
+let defaultFieldId = <?= (int)$default_chart_field_id ?>;
+let activeChart = null;
+
+const chartColors = [
+    '#16a34a', '#3b82f6', '#f59e0b', '#8b5cf6', '#06b6d4', '#ec4899', '#f97316', '#64748b', '#10b981', '#6366f1'
+];
+
+function updateChartDisplay(fieldId) {
+    const data = chartDataMap[fieldId];
+    const canvas = document.getElementById('analyticsChart');
+    const notice = document.getElementById('noChartDataNotice');
+    const titleEl = document.getElementById('kpiFieldTitle');
+    const subEl = document.getElementById('kpiFieldSub');
+
+    if (!data) return;
+
+    titleEl.textContent = data.label;
+    titleEl.title = data.label;
+
+    if (data.labels && data.labels.length > 0) {
+        canvas.style.display = 'block';
+        notice.style.display = 'none';
+        subEl.textContent = `Đã phân loại thành ${data.labels.length} nhóm dữ liệu (${data.total_entries} lượt ghi nhận)`;
+
+        if (activeChart) {
+            activeChart.destroy();
         }
+
+        const ctx = canvas.getContext('2d');
+        activeChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    data: data.values,
+                    backgroundColor: chartColors.slice(0, data.labels.length),
+                    borderWidth: 2,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { boxWidth: 12, font: { size: 11 } }
+                    }
+                }
+            }
+        });
+    } else {
+        if (activeChart) {
+            activeChart.destroy();
+            activeChart = null;
+        }
+        canvas.style.display = 'none';
+        notice.style.display = 'block';
+        subEl.textContent = 'Chưa có dữ liệu phản hồi cho trường này';
     }
-});
-<?php endif; ?>
+}
+
+const selectChartElement = document.getElementById('selectChartField');
+if (selectChartElement) {
+    selectChartElement.addEventListener('change', function() {
+        updateChartDisplay(this.value);
+    });
+}
+
+if (defaultFieldId > 0) {
+    updateChartDisplay(defaultFieldId);
+}
 
 const sidebarSearch = document.getElementById('sidebarSearchForms');
 if (sidebarSearch) {

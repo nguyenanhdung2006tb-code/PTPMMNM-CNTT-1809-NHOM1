@@ -22,35 +22,43 @@ if (session_status() === PHP_SESSION_NONE) {
 <body class="bg-white">
 
     <!-- HEADER / NAVIGATION -->
-    <header class="bg-white sticky top-0 z-50 shadow-sm px-4 md:px-16 py-4 flex items-center justify-between">
+    <header class="bg-white sticky top-0 z-50 shadow-sm px-4 lg:px-8 xl:px-12 py-3.5 flex items-center justify-between">
         <button id="menuBtn" type="button" class="lg:hidden w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition order-last" aria-label="Mở menu" aria-expanded="false">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
 
-        <div class="flex items-center">
+        <!-- Logo cố định kích thước, tạo khoảng trống rõ ràng -->
+        <div class="flex items-center shrink-0 mr-4 lg:mr-8">
             <a href="index.php">
-                <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-12 w-auto object-contain">
+                <img src="image/x2Mf_logo (1).png" alt="Logo LICH Nông Nghiệp" class="h-10 lg:h-12 w-auto object-contain">
             </a>
         </div>
 
-        <nav class="hidden lg:flex space-x-6 font-medium text-gray-600 items-center">
-            <a href="index.php" class="text-green-600 border-b-2 border-green-600 pb-1">Trang chủ</a>
-            <a href="catalogue.php" class="hover:text-green-600 transition-all">Catalogue lịch</a>
-            <a href="dich-vu.php" class="hover:text-green-600 transition-all">Dịch vụ</a>
-            <a href="san-pham.php" class="hover:text-green-600 transition-all">Sản phẩm</a>
-            <a href="forms.php" class="hover:text-green-600 transition-all">Đặt in & Khảo sát</a>
+        <!-- Menu ngang không rớt dòng và khoảng cách thoáng -->
+        <nav class="hidden lg:flex items-center gap-3 xl:gap-5 font-medium text-gray-600 text-[13px] xl:text-[14px]">
+            <a href="index.php" class="text-green-600 font-semibold border-b-2 border-green-600 pb-1 whitespace-nowrap">Trang chủ</a>
+            <a href="catalogue.php" class="hover:text-green-600 transition-all whitespace-nowrap">Catalogue lịch</a>
+            <a href="dich-vu.php" class="hover:text-green-600 transition-all whitespace-nowrap">Dịch vụ</a>
+            <a href="san-pham.php" class="hover:text-green-600 transition-all whitespace-nowrap">Sản phẩm</a>
+            
+            <!-- Nút Cổng khảo sát tinh tế, chữ không bao giờ bị cắt dòng -->
+            <a href="forms.php" class="text-emerald-700 font-semibold bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg transition-all whitespace-nowrap">
+                Đặt in & Khảo sát
+            </a>
 
-            <!-- Chỉ Admin mới nhìn thấy mục Quản trị biểu mẫu -->
-           <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-           <a href="admin/" class="block px-4 py-3 rounded-xl text-gray-700 hover:text-green-600 hover:bg-gray-50 font-semibold">Quản trị biểu mẫu</a>
-           <?php endif; ?>
+            <!-- Nút Quản trị gọn gàng cho Admin -->
+            <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                <a href="admin/index.php" class="text-amber-800 font-semibold bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-lg transition-all whitespace-nowrap">
+                    Quản trị
+                </a>
+            <?php endif; ?>
 
-            <a href="in-lich-tet.php" class="hover:text-green-600 transition-all">In lịch Tết</a>
-            <a href="blog.php" class="hover:text-green-600 transition-all">Blog</a>
-            <a href="About.php" class="hover:text-green-600 transition-all">Về chúng tôi</a>
+            <a href="in-lich-tet.php" class="hover:text-green-600 transition-all whitespace-nowrap">In lịch Tết</a>
+            <a href="blog.php" class="hover:text-green-600 transition-all whitespace-nowrap">Blog</a>
+            <a href="About.php" class="hover:text-green-600 transition-all whitespace-nowrap">Về chúng tôi</a>
         </nav>
 
-        <div class="relative flex items-center gap-2">
+        <div class="relative flex items-center gap-2 shrink-0">
             <button id="searchToggleBtn" type="button" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-500 transition" aria-label="Tìm kiếm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </button>
@@ -64,7 +72,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 <div id="searchResults" class="max-h-96 overflow-y-auto"></div>
             </div>
 
-            <!-- CỤM TÀI KHOẢN: NẾU ĐÃ ĐĂNG NHẬP -->
+            <!-- CỤM TÀI KHOẢN -->
             <?php if (isset($_SESSION['username'])): ?>
                 <div class="hidden lg:flex items-center gap-2 pl-3 border-l border-gray-200">
                     <div class="text-right">
@@ -75,7 +83,6 @@ if (session_status() === PHP_SESSION_NONE) {
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
                     </a>
                 </div>
-            <!-- NẾU CHƯA ĐĂNG NHẬP: HIỆN CẢ ĐĂNG KÝ VÀ ĐĂNG NHẬP -->
             <?php else: ?>
                 <div class="hidden lg:flex items-center gap-2">
                     <a href="register.php" class="text-sm font-semibold text-gray-600 hover:text-green-600 px-3 py-2 rounded-lg transition-all">
@@ -87,7 +94,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 </div>
             <?php endif; ?>
 
-            <a href="lien-he.php" class="hidden lg:inline-flex bg-green-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md ml-1">
+            <a href="lien-he.php" class="hidden lg:inline-flex bg-green-500 text-white px-5 py-2 rounded-lg font-semibold hover:bg-orange-600 transition-all shadow-md ml-1 whitespace-nowrap">
                 Liên hệ
             </a>
         </div>
@@ -97,11 +104,10 @@ if (session_status() === PHP_SESSION_NONE) {
     <div id="mobileMenu" class="hidden lg:hidden bg-white border-t border-gray-100 shadow-lg px-4 py-4">
         <nav class="flex flex-col gap-1">
             <a href="index.php" class="block px-4 py-3 rounded-xl bg-green-50 text-green-600 font-bold">Trang chủ</a>
-            <a href="forms.php" class="block px-4 py-3 rounded-xl bg-emerald-100/60 text-emerald-800 font-bold">📋 Đặt in & Khảo sát (Form Đề tài 11)</a>
+            <a href="forms.php" class="block px-4 py-3 rounded-xl bg-emerald-50 text-emerald-800 font-bold">Đặt in & Khảo sát</a>
 
-            <!-- Chỉ Admin mới thấy nút quản trị trên Mobile -->
             <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                <a href="admin/" class="block px-4 py-3 rounded-xl bg-amber-100/60 text-amber-800 font-bold">⚙️ Quản trị Biểu mẫu</a>
+                <a href="admin/index.php" class="block px-4 py-3 rounded-xl bg-amber-50 text-amber-800 font-bold">Quản trị Biểu mẫu</a>
             <?php endif; ?>
 
             <a href="catalogue.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Catalogue lịch</a>
@@ -112,7 +118,6 @@ if (session_status() === PHP_SESSION_NONE) {
             <a href="About.php" class="block px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 font-medium">Về chúng tôi</a>
         </nav>
 
-        <!-- Trạng thái tài khoản trên Mobile -->
         <?php if (isset($_SESSION['username'])): ?>
             <div class="mt-3 p-3 bg-gray-50 rounded-xl flex items-center justify-between border border-gray-100">
                 <span class="text-sm text-gray-700">Tài khoản: <strong class="text-green-700"><?= htmlspecialchars($_SESSION['fullname']) ?></strong></span>
@@ -141,7 +146,9 @@ if (session_status() === PHP_SESSION_NONE) {
                         Xưởng in lịch Tết & hộp quà doanh nghiệp – sản xuất trực tiếp, giao hàng toàn quốc.
                     </p>
                     <div class="flex flex-wrap gap-4">
-                        <a href="forms.php" class="btn-primary !px-8 !py-3.5 text-base bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-lg">Đăng ký đặt in mẫu →</a>
+                        <a href="forms.php" class="btn-primary !px-8 !py-3.5 text-base bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold shadow-lg">
+                            Đăng ký & Khảo sát trực tuyến →
+                        </a>
                         <a href="dich-vu.php" class="bg-white/20 hover:bg-white/30 text-white px-6 py-3.5 rounded-xl font-semibold backdrop-blur-sm transition">Khám phá dịch vụ</a>
                     </div>
                 </div>
@@ -322,12 +329,12 @@ if (session_status() === PHP_SESSION_NONE) {
                 <h5 class="font-bold mb-6">Liên kết nhanh</h5>
                 <ul class="space-y-4 text-gray-500 text-sm">
                     <li><a href="index.php" class="hover:text-green-600">Trang chủ</a></li>
-                    <li><a href="forms.php" class="text-emerald-700 font-semibold hover:text-green-600">📋 Đăng ký & Khảo sát (Form)</a></li>
+                    <!-- Đã xóa icon quyển sổ, đồng bộ chữ với toàn bộ danh mục -->
+                    <li><a href="forms.php" class="hover:text-green-600">Đặt in & Khảo sát</a></li>
 
-                    <!-- Ẩn Quản trị biểu mẫu ở footer nếu không phải admin -->
-                   <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-                   <li><a href="admin/" class="hover:text-green-600">Quản trị biểu mẫu</a></li>
-                   <?php endif; ?>
+                    <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
+                        <li><a href="admin/index.php" class="hover:text-green-600">Quản trị biểu mẫu</a></li>
+                    <?php endif; ?>
 
                     <li><a href="catalogue.php" class="hover:text-green-600">Catalogue lịch</a></li>
                     <li><a href="dich-vu.php" class="hover:text-green-600">Dịch vụ</a></li>

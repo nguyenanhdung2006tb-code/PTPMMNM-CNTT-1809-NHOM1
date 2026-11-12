@@ -1,4 +1,4 @@
-/* =========================================================
+﻿/* =========================================================
    LỊCH NÔNG NGHIỆP — KHO DỮ LIỆU DÙNG CHUNG (data.js)
    Dùng chung cho: admin.html, blog.html, post.html, index.html,
                    dich-vu.html, dich-vu-chi-tiet.html
@@ -188,7 +188,7 @@ const LNN_DEFAULT_PRODUCTS = [
     { id: 'prod_071', groupId: 'grp_tui_5', title: 'TÚI IN HOA QUẢ, THỰC PHẨM, YẾN SÀO CAO CẤP HQ 10', image: 'image/sanpham/duPl_lich_NN_-1--pdf.png', images: ['image/sanpham/duPl_lich_NN_-1--pdf.png'], desc: 'Kích thước: Theo yêu cầu — Giá tham khảo: Liên hệ', year: '2026' },
     { id: 'prod_072', groupId: 'grp_tui_5', title: 'TÚI IN HOA QUẢ, THỰC PHẨM, YẾN SÀO CAO CẤP HQ 9', image: 'image/sanpham/CU8U_lich_NN_-1--pdf_-10-.png', images: ['image/sanpham/CU8U_lich_NN_-1--pdf_-10-.png'], desc: 'Kích thước: Theo yêu cầu — Giá tham khảo: Liên hệ', year: '2026' },
     { id: 'prod_073', groupId: 'grp_tui_5', title: 'TÚI IN HOA QUẢ, THỰC PHẨM, YẾN SÀO CAO CẤP HQ 8', image: 'image/sanpham/DTYt_lich_NN_-1--pdf_-9-.png', images: ['image/sanpham/DTYt_lich_NN_-1--pdf_-9-.png'], desc: 'Kích thước: Theo yêu cầu — Giá tham khảo: Liên hệ', year: '2026' },
-    { id: 'prod_074', groupId: 'grp_tui_5', title: 'TÚI IN HOA QUẢ, THỰC PHẨM, YẾN SÀO CAO CẤP HQ 7', image: 'image/sanpham/88Pg_b8lj_mau-tui-giay-hoa-qua-thuc-pham-yen-saoHQ4-1.jpg', images: ['image/sanpham/88Pg_b8lj_mau-tui-giay-hoa-qua-thuc-pham-yen-saoHQ4-1.jpg'], desc: 'Kích thước: Theo yêu cầu — Giá tham khảo: Liên hệ', year: '2026' },
+    { id: 'prod_074', groupId: 'grp_tui_5', title: 'TÚI IN HOA QUẢ, THỰC PHẨM, YẾN SÀO CAO CẤP HQ 7', image: 'image/sanpham/img_clean_1.jpg', images: ['image/sanpham/img_clean_1.jpg'], desc: 'Kích thước: Theo yêu cầu — Giá tham khảo: Liên hệ', year: '2026' },
     { id: 'prod_075', groupId: 'grp_tui_6', title: 'TÚI GIẤY IN PHÒNG KHÁM PK 1', image: 'image/sanpham/zPXB_lich_NN_-1--pdf_-3-.png', images: ['image/sanpham/zPXB_lich_NN_-1--pdf_-3-.png'], desc: 'Kích thước: Theo yêu cầu — Giá tham khảo: Liên hệ', year: '2026' },
     { id: 'prod_076', groupId: 'grp_tui_6', title: 'TÚI GIẤY IN PHÒNG KHÁM', image: 'image/sanpham/F0Si_lich_NN_-1--pdf_-1-.png', images: ['image/sanpham/F0Si_lich_NN_-1--pdf_-1-.png'], desc: 'Kích thước: Theo yêu cầu — Giá tham khảo: Liên hệ', year: '2026' },
     { id: 'prod_077', groupId: 'grp_tui_6', title: 'TÚI GIẤY IN CÔNG TY CT 2', image: 'image/sanpham/hJp4_lich_NN_-1--pdf.png', images: ['image/sanpham/hJp4_lich_NN_-1--pdf.png'], desc: 'Kích thước: Theo yêu cầu — Giá tham khảo: Liên hệ', year: '2026' },

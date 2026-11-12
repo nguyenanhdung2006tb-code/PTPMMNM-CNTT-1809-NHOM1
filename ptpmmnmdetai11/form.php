@@ -39,18 +39,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $submitted_answers = $_POST['fields'] ?? [];
     $errors = [];
 
-    foreach ($fields as $field) {
-        $fid = $field['id'];
-        $val = $submitted_answers[$fid] ?? '';
+    // Đánh giá điều kiện ẩn/hiện tại máy chủ (đồng bộ với logic Client-side)
+    $hidden_fields = [];
+    foreach ($conditions as $cond) {
+        $hidden_fields[(int)$cond['target_field_id']] = true;
+    }
+    foreach ($conditions as $cond) {
+        $src_id = (int)$cond['source_field_id'];
+        $tgt_id = (int)$cond['target_field_id'];
+        $src_raw = $submitted_answers[$src_id] ?? '';
+        $src_val = is_array($src_raw) ? implode(', ', $src_raw) : trim((string)$src_raw);
 
+        if (empty($hidden_fields[$src_id]) && $src_val === trim((string)$cond['trigger_value'])) {
+            $hidden_fields[$tgt_id] = false;
+        }
+    }
+
+    $valid_answers = [];
+    foreach ($fields as $field) {
+        $fid = (int)$field['id'];
+
+        // Bỏ qua trường đang bị ẩn theo điều kiện (không bắt lỗi required và không lưu dữ liệu gửi lén)
+        if (!empty($hidden_fields[$fid])) {
+            continue;
+        }
+
+        $val = $submitted_answers[$fid] ?? '';
         if (is_array($val)) {
-            $val = implode(', ', $val);
+            $val = implode(', ', array_map('trim', $val));
         } else {
-            $val = trim($val);
+            $val = trim((string)$val);
         }
 
         if ($field['is_required'] && $val === '') {
             $errors[] = "Vui lòng nhập/chọn thông tin cho trường: " . htmlspecialchars($field['label']);
+        } elseif ($val !== '') {
+            $valid_answers[$fid] = $val;
         }
     }
 
@@ -63,16 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response_id = $pdo->lastInsertId();
 
             $stmt_ans = $pdo->prepare("INSERT INTO answers (response_id, field_id, answer_value) VALUES (?, ?, ?)");
-            foreach ($fields as $field) {
-                $fid = $field['id'];
-                $val = $submitted_answers[$fid] ?? '';
-                if (is_array($val)) {
-                    $val = implode(', ', $val);
-                }
-                $val = trim($val);
-                if ($val !== '') {
-                    $stmt_ans->execute([$response_id, $fid, $val]);
-                }
+            foreach ($valid_answers as $fid => $clean_val) {
+                $stmt_ans->execute([$response_id, $fid, $clean_val]);
             }
 
             $pdo->commit();

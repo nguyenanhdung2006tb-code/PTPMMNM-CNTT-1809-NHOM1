@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th10 27, 2026 lúc 05:32 AM
+-- Thời gian đã tạo: Th10 12, 2026 lúc 06:03 AM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.0.30
 
@@ -48,7 +48,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (7, 1, 7, 'Lịch bloc cực đại'),
 (8, 1, 8, '220'),
 (9, 1, 9, 'Nhận trực tiếp tại NXB'),
-(10, 1, 11, '2026-12-15'),
 (11, 2, 1, 'Trần Thị Mai 2'),
 (12, 2, 2, '0981339536'),
 (13, 2, 3, 'khach2@gmail.com'),
@@ -57,7 +56,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (16, 2, 8, '65'),
 (17, 2, 9, 'Giao hàng tận nơi'),
 (18, 2, 10, 'Số 39 Đường Giải Phóng, Hà Nội'),
-(19, 2, 11, '2026-12-15'),
 (20, 3, 1, 'Lê Hoàng Long 3'),
 (21, 3, 2, '0982407503'),
 (22, 3, 3, 'khach3@gmail.com'),
@@ -68,7 +66,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (27, 3, 8, '198'),
 (28, 3, 9, 'Giao hàng tận nơi'),
 (29, 3, 10, 'Số 147 Đường Giải Phóng, Hà Nội'),
-(30, 3, 11, '2026-12-15'),
 (31, 4, 1, 'Phạm Minh Đức 4'),
 (32, 4, 2, '0987146367'),
 (33, 4, 3, 'khach4@gmail.com'),
@@ -76,7 +73,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (35, 4, 7, 'Lịch bloc cực đại'),
 (36, 4, 8, '133'),
 (37, 4, 9, 'Nhận trực tiếp tại NXB'),
-(38, 4, 11, '2026-12-15'),
 (39, 5, 1, 'Hoàng Thu Trang 5'),
 (40, 5, 2, '0982875627'),
 (41, 5, 3, 'khach5@gmail.com'),
@@ -87,7 +83,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (46, 5, 8, '416'),
 (47, 5, 9, 'Giao hàng tận nơi'),
 (48, 5, 10, 'Số 95 Đường Giải Phóng, Hà Nội'),
-(49, 5, 11, '2026-12-15'),
 (50, 6, 1, 'Đỗ Quốc Bảo 6'),
 (51, 6, 2, '0987871770'),
 (52, 6, 3, 'khach6@gmail.com'),
@@ -96,7 +91,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (55, 6, 8, '262'),
 (56, 6, 9, 'Giao hàng tận nơi'),
 (57, 6, 10, 'Số 55 Đường Giải Phóng, Hà Nội'),
-(58, 6, 11, '2026-12-15'),
 (59, 7, 1, 'Vũ Thị Lan 7'),
 (60, 7, 2, '0989300953'),
 (61, 7, 3, 'khach7@gmail.com'),
@@ -106,7 +100,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (65, 7, 7, 'Lịch bloc cực đại'),
 (66, 7, 8, '463'),
 (67, 7, 9, 'Nhận trực tiếp tại NXB'),
-(68, 7, 11, '2026-12-15'),
 (69, 8, 1, 'Bùi Văn Hùng 8'),
 (70, 8, 2, '0984774899'),
 (71, 8, 3, 'khach8@gmail.com'),
@@ -115,7 +108,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (74, 8, 8, '306'),
 (75, 8, 9, 'Giao hàng tận nơi'),
 (76, 8, 10, 'Số 94 Đường Giải Phóng, Hà Nội'),
-(77, 8, 11, '2026-12-15'),
 (78, 9, 1, 'Ngô Thanh Tùng 9'),
 (79, 9, 2, '0988625968'),
 (80, 9, 3, 'khach9@gmail.com'),
@@ -126,7 +118,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (85, 9, 8, '106'),
 (86, 9, 9, 'Giao hàng tận nơi'),
 (87, 9, 10, 'Số 120 Đường Giải Phóng, Hà Nội'),
-(88, 9, 11, '2026-12-15'),
 (89, 10, 1, 'Đặng Thảo Vy 10'),
 (90, 10, 2, '0983155136'),
 (91, 10, 3, 'khach10@gmail.com'),
@@ -134,7 +125,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (93, 10, 7, 'Lịch bloc cực đại'),
 (94, 10, 8, '80'),
 (95, 10, 9, 'Nhận trực tiếp tại NXB'),
-(96, 10, 11, '2026-12-15'),
 (97, 11, 1, 'Nguyễn Văn An 11'),
 (98, 11, 2, '0989998446'),
 (99, 11, 3, 'khach11@gmail.com'),
@@ -145,7 +135,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (104, 11, 8, '240'),
 (105, 11, 9, 'Giao hàng tận nơi'),
 (106, 11, 10, 'Số 53 Đường Giải Phóng, Hà Nội'),
-(107, 11, 11, '2026-12-15'),
 (108, 12, 1, 'Trần Thị Mai 12'),
 (109, 12, 2, '0988436982'),
 (110, 12, 3, 'khach12@gmail.com'),
@@ -154,7 +143,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (113, 12, 8, '235'),
 (114, 12, 9, 'Giao hàng tận nơi'),
 (115, 12, 10, 'Số 97 Đường Giải Phóng, Hà Nội'),
-(116, 12, 11, '2026-12-15'),
 (117, 13, 1, 'Lê Hoàng Long 13'),
 (118, 13, 2, '0983329005'),
 (119, 13, 3, 'khach13@gmail.com'),
@@ -164,7 +152,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (123, 13, 7, 'Lịch bloc cực đại'),
 (124, 13, 8, '446'),
 (125, 13, 9, 'Nhận trực tiếp tại NXB'),
-(126, 13, 11, '2026-12-15'),
 (127, 14, 1, 'Phạm Minh Đức 14'),
 (128, 14, 2, '0987596818'),
 (129, 14, 3, 'khach14@gmail.com'),
@@ -173,7 +160,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (132, 14, 8, '55'),
 (133, 14, 9, 'Giao hàng tận nơi'),
 (134, 14, 10, 'Số 127 Đường Giải Phóng, Hà Nội'),
-(135, 14, 11, '2026-12-15'),
 (136, 15, 1, 'Hoàng Thu Trang 15'),
 (137, 15, 2, '0986029229'),
 (138, 15, 3, 'khach15@gmail.com'),
@@ -184,7 +170,6 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (143, 15, 8, '111'),
 (144, 15, 9, 'Giao hàng tận nơi'),
 (145, 15, 10, 'Số 140 Đường Giải Phóng, Hà Nội'),
-(146, 15, 11, '2026-12-15'),
 (147, 16, 12, 'Đỗ Quốc Bảo 16'),
 (148, 16, 13, 'Kỹ thuật chăm sóc cây có múi vụ đông'),
 (149, 16, 14, 'Trồng trọt'),
@@ -273,14 +258,28 @@ INSERT INTO `answers` (`id`, `response_id`, `field_id`, `answer_value`) VALUES
 (232, 30, 21, 'Rất đẹp'),
 (233, 30, 23, 'Có'),
 (234, 30, 24, 'reader29@nongnghiep.vn'),
-(235, 31, 1, 'Nguyễn Anh Dũng '),
-(236, 31, 2, '0912345677'),
-(237, 31, 3, 'dd@35gmail.'),
-(238, 31, 4, 'Cá nhân'),
-(239, 31, 7, 'Lịch bloc cực đại'),
-(240, 31, 8, '2'),
-(241, 31, 9, 'Nhận trực tiếp tại NXB'),
-(242, 31, 11, '2026-10-27');
+(243, 32, 1, 'Lâm Nhạc Anh'),
+(244, 32, 2, '0912345678'),
+(245, 32, 3, 'dd@gmail.'),
+(246, 32, 4, 'Cá nhân'),
+(247, 32, 7, 'Lịch bloc cực đại'),
+(248, 32, 8, '4'),
+(249, 32, 9, 'Nhận trực tiếp tại NXB'),
+(251, 33, 1, 'Lâm Nhạc Anh'),
+(252, 33, 2, '0912345678'),
+(253, 33, 3, 'dd@35gmail.'),
+(254, 33, 4, 'Cá nhân'),
+(255, 33, 7, 'Lịch treo tường 7 tờ'),
+(256, 33, 8, '5'),
+(257, 33, 9, 'Giao hàng tận nơi'),
+(258, 33, 10, 'Hà Nội'),
+(281, 40, 1, 'Quản Trị Viên'),
+(282, 40, 2, '0912345678'),
+(283, 40, 3, 'dd@gmail.'),
+(284, 40, 4, 'Cá nhân'),
+(285, 40, 7, 'Lịch bloc cực đại'),
+(286, 40, 8, '11'),
+(287, 40, 9, 'Nhận trực tiếp tại NXB');
 
 -- --------------------------------------------------------
 
@@ -334,14 +333,13 @@ INSERT INTO `fields` (`id`, `form_version_id`, `label`, `field_type`, `options_j
 (1, 1, 'Họ và tên người liên hệ', 'text', NULL, 1, 1),
 (2, 1, 'Số điện thoại', 'text', NULL, 1, 2),
 (3, 1, 'Email', 'text', NULL, 0, 3),
-(4, 1, 'Đối tượng khách hàng', 'radio', '[\"C\\u00e1 nh\\u00e2n\",\"Doanh nghi\\u1ec7p \\/ HTX\"]', 1, 4),
+(4, 1, 'Đối tượng khách hàng', 'radio', '[\"Cá nhân\",\"Doanh nghiệp\",\"HTX\"]', 1, 4),
 (5, 1, 'Tên doanh nghiệp / Đơn vị', 'text', NULL, 0, 5),
 (6, 1, 'Mã số thuế', 'text', NULL, 0, 6),
-(7, 1, 'Loại ấn phẩm lịch muốn in', 'radio', '[\"L\\u1ecbch bloc c\\u1ef1c \\u0111\\u1ea1i\",\"L\\u1ecbch treo t\\u01b0\\u1eddng 7 t\\u1edd\",\"L\\u1ecbch \\u0111\\u1ec3 b\\u00e0n ch\\u1eef A\",\"S\\u1ed5 tay n\\u00f4ng v\\u1ee5\"]', 1, 7),
+(7, 1, 'Loại ấn phẩm lịch muốn in', 'radio', '[\"Lịch bloc cực đại\",\"Lịch treo tường 7 tờ\",\"Lịch để bàn chữ A\",\"Sổ tay nông vụ\"]', 1, 7),
 (8, 1, 'Số lượng dự kiến (cuốn/bộ)', 'number', NULL, 1, 8),
-(9, 1, 'Hình thức nhận hàng', 'radio', '[\"Nh\\u1eadn tr\\u1ef1c ti\\u1ebfp t\\u1ea1i NXB\",\"Giao h\\u00e0ng t\\u1eadn n\\u01a1i\"]', 1, 9),
+(9, 1, 'Hình thức nhận hàng', 'radio', '[\"Nhận trực tiếp tại NXB\",\"Giao hàng tận nơi\"]', 1, 9),
 (10, 1, 'Địa chỉ giao hàng chi tiết', 'text', NULL, 0, 10),
-(11, 1, 'Ngày mong muốn nhận hàng', 'date', NULL, 0, 11),
 (12, 2, 'Họ tên tác giả / Chủ biên', 'text', NULL, 1, 1),
 (13, 2, 'Tên bản thảo tác phẩm', 'text', NULL, 1, 2),
 (14, 2, 'Lĩnh vực chuyên môn', 'radio', '[\"Tr\\u1ed3ng tr\\u1ecdt\",\"Ch\\u0103n nu\\u00f4i th\\u00fa y\",\"L\\u00e2m nghi\\u1ec7p\",\"Th\\u1ee7y s\\u1ea3n\"]', 1, 3),
@@ -448,7 +446,9 @@ INSERT INTO `responses` (`id`, `form_version_id`, `submitted_at`) VALUES
 (28, 3, '2026-10-21 05:01:12'),
 (29, 3, '2026-10-22 11:01:12'),
 (30, 3, '2026-10-24 18:01:12'),
-(31, 1, '2026-10-26 08:03:28');
+(32, 1, '2026-10-27 15:56:51'),
+(33, 1, '2026-10-30 03:36:32'),
+(40, 1, '2026-11-12 04:59:23');
 
 -- --------------------------------------------------------
 
@@ -472,7 +472,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `fullname`, `role`, `created_at`) VALUES
 (2, 'khach1', '$2y$10$WwO0jK047qZ355Hghn69j.rV1M8KzI17dZ80X0g.Tj69G4ZlE8w9W', 'Nguyễn Văn Khách', 'client', '2026-10-26 09:40:29'),
 (3, 'khach2', '$2y$10$JzHMVvPLlL1JN5VZvCbpNu/IlFDy.e.uX4imZ6S52jQ/xPQR9Phjm', 'Lâm Nhạc Anh', 'client', '2026-10-27 03:25:14'),
-(4, 'admin', '$2y$10$aE3GSC4TCWj1meT1CmifOe2soLDfnU0zvM9oG3oiBy5Zk/NFif7eW', 'Quản Trị Viên', 'admin', '2026-10-27 03:41:36');
+(4, 'admin', '$2y$10$aE3GSC4TCWj1meT1CmifOe2soLDfnU0zvM9oG3oiBy5Zk/NFif7eW', 'Quản Trị Viên', 'admin', '2026-10-27 03:41:36'),
+(5, 'khach3', '$2y$10$Xdo5QoWd/LoCQsF8CIwMoeaiEokANIlk/a01QPQr4/oS8xIp1SEMy', 'Nguyễn Văn Tài', 'client', '2026-10-29 06:30:24');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -537,7 +538,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT cho bảng `answers`
 --
 ALTER TABLE `answers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=243;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=288;
 
 --
 -- AUTO_INCREMENT cho bảng `conditions`
@@ -549,31 +550,31 @@ ALTER TABLE `conditions`
 -- AUTO_INCREMENT cho bảng `fields`
 --
 ALTER TABLE `fields`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT cho bảng `forms`
 --
 ALTER TABLE `forms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `form_versions`
 --
 ALTER TABLE `form_versions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT cho bảng `responses`
 --
 ALTER TABLE `responses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
